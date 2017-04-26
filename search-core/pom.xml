@@ -56,21 +56,24 @@
                         <version>1.6.0</version>
                         <executions>
                             <execution>
+                                <id>compile-vue</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>exec</goal>
                                 </goals>
+                                <configuration>
+                                    <executable>npm</executable>
+                                    <!-- optional -->
+                                    <workingDirectory>src/main/resources/webapp</workingDirectory>
+                                    <arguments>
+                                        <argument>run</argument>
+                                        <argument>build</argument>
+                                    </arguments>
+                                </configuration>
                             </execution>
+
+
                         </executions>
-                        <configuration>
-                            <executable>npm</executable>
-                            <!-- optional -->
-                            <workingDirectory>src/main/resources/webapp</workingDirectory>
-                            <arguments>
-                                <argument>run</argument>
-                                <argument>build</argument>
-                            </arguments>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

@@ -13,7 +13,7 @@ REM * set up directory structure end
 
 set CREATE_MONGO="on"
 if %CREATE_MONGO% == "on" (
-	mongo mongo.js
+	mongo mongo-medical.js
 )
 
 REM * since the spring not accept single slash
