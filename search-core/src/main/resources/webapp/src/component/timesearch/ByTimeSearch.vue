@@ -31,7 +31,7 @@ export default {
     name: 'by-time-search',
     data() {
         return {
-        	qualifiedTime:["早餐前","早餐后","午餐前","午餐后","晚餐前","晚餐后","临睡前"],
+        	
             key: '',
             time:"",
             matchingPrison:[],
@@ -42,6 +42,11 @@ export default {
         selectDropDown: function(value){
 			this.time = value;
 		},
+    },
+    computed: {
+    	qualifiedTime:function(){
+    		return window.qualifiedTime
+    	}
     },
     components: {
         'prison-panel': InmatePanel

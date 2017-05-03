@@ -2,7 +2,7 @@ package com.neil.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.neil.medical.MedicalMatching;
-import com.neil.medical.service.MedicalTakenExam;
+import com.neil.medical.service.ScheduledMedicalTakenExam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,7 +20,7 @@ import java.util.List;
 public class MedicalTakenExamTest extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    private MedicalTakenExam exam;
+    private ScheduledMedicalTakenExam exam;
 
     @Test
     public void checkUntaken() {

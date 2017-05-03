@@ -3,15 +3,11 @@ package com.neil.medical.service;
 import com.alibaba.fastjson.JSONObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
 import com.neil.medical.pojo.PrisonMedicalInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,27 +16,26 @@ import java.util.List;
 @Service
 public class PrisonMedicalService {
 
-    public static final String INTAKE_RECORD_COLLECTION = "intake_records";
+    public static final String INMATE_REQUIRED_MEDICAL_COLLECTION = "inmate-medical";
+
+    @Autowired
+    private WrappedMongoTemplate<PrisonMedicalInfo> wrappedTemplate;
+
     @Autowired
     private MongoTemplate template;
 
-    public List<PrisonMedicalInfo> getPrisonMedicalInfo(String code) {
-        DBCollection prisonMedicalCollection = template.getCollection("inmate-medical");
-        DBObject queryCondition = new BasicDBObject();
+
+    public List<JSONObject> getPrisonMedicalInfo(String code) {
+        JSONObject queryCondition = new JSONObject();
         if (!code.equalsIgnoreCase("all")) {
             queryCondition.put("code", code);
         }
-        DBCursor cursor = prisonMedicalCollection.find(queryCondition);
-        List<PrisonMedicalInfo> medicalInfoList = new ArrayList<>();
-        while (cursor.hasNext()) {
-            medicalInfoList.add(new JSONObject(cursor.next().toMap()).toJavaObject(PrisonMedicalInfo.class));
-
-        }
-        return medicalInfoList;
+        return wrappedTemplate.query(INMATE_REQUIRED_MEDICAL_COLLECTION, queryCondition);
     }
 
     public void insertInmateMedicalInfo(List<PrisonMedicalInfo> prisonMedicalInfos) {
-        DBCollection inmateMedical = template.getCollection("inmate-medical");
+        DBCollection inmateMedical = template.getCollection(INMATE_REQUIRED_MEDICAL_COLLECTION);
+        inmateMedical.remove(new BasicDBObject("code", prisonMedicalInfos.get(0).getCode()));
         for (PrisonMedicalInfo pmi : prisonMedicalInfos) {
             JSONObject mapPmi = (JSONObject) JSONObject.toJSON(pmi);
             inmateMedical.update(new BasicDBObject("code", pmi.getCode())
@@ -51,10 +46,5 @@ public class PrisonMedicalService {
         }
     }
 
-    public void inmateConfirmMedicalIntake(String code) {
-        DBCollection intakeRecords = template.getCollection(INTAKE_RECORD_COLLECTION);
-        intakeRecords.save(new BasicDBObject("code", code)
-                .append("timestamp", new Date().getTime())
-                .append("checked", false));
-    }
+
 }

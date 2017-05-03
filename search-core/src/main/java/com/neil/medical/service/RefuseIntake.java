@@ -1,14 +1,14 @@
 package com.neil.medical.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by nhu on 4/23/2017.
@@ -20,18 +20,16 @@ public class RefuseIntake {
     @Autowired
     private MongoTemplate template;
 
+    @Autowired
+    private WrappedMongoTemplate<JSONObject> wrappedMongoTemplate;
+
     public List<JSONObject> getAllRefusingRecord() {
-        DBCursor cursor = template.getCollection(MISSING_INTAKE_COLLECTION)
-                .find();
-        List<JSONObject> records = new ArrayList<>();
-        while (cursor.hasNext()) {
-            records.add(new JSONObject((BasicDBObject) cursor.next()));
-        }
-        return records;
+        return wrappedMongoTemplate.query(MISSING_INTAKE_COLLECTION, new JSONObject());
     }
 
-    public void updateCheckedRecords(List<JSONObject> records) {
-        for (JSONObject record : records) {
+    public void updateCheckedRecords(JSONArray records) {
+        for (Object r : records) {
+            JSONObject record = new JSONObject((Map) r);
             template.getCollection(MISSING_INTAKE_COLLECTION)
                     .update(
                             new BasicDBObject("code", record.getString("code"))

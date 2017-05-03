@@ -3,8 +3,9 @@
 		<div class="row">
 			<div class="col-md-3"> 
 				<ul class="list-group">
-					<li href="#/working/data-edit/medical"  class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/medical') >= 0?'list-group-item-success':''">药物管理</li>
-					<li href="#/working/data-edit/inmate" class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/inmate') >= 0?'list-group-item-success':''">服刑人员未服药记录</li>
+					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/medical') >= 0?'list-group-item-success':''"> <a href="#/working/data-edit/medical" >药物管理</a></li>
+					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/inmate') >= 0?'list-group-item-success':''"> <a href="#/working/data-edit/inmate" >服刑人员未服药记录</a></li>
+					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/intake') >= 0?'list-group-item-success':''"><a href="#/working/data-edit/intake">服刑人员服药记录</a></li>
 					<hr>
 					<li class="list-group-item list-group-item-warning" role="button" @click="downloadMedicalInfo()">服刑人员服药情况下载</li>
 				</ul>

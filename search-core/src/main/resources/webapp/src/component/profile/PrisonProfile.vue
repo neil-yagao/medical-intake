@@ -7,7 +7,7 @@
 					<img :src="img" data-holder-rendered="true"> 
 					<div class="caption text-center">
 			    		<p>{{currentCode}}</p>
-			    		<p><button class="btn btn-info" @click="goBack()">返回</button></p>
+			    		<p><button class="btn btn-info" @click="goBack()" v-if="this.identity == 'police'">返回</button></p>
 			    	</div>
 				</a>
 			</div>

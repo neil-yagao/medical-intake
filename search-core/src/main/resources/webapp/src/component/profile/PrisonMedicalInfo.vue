@@ -9,10 +9,6 @@
 					  <div :class="code?'':'has-error'" class="form-group "><input type="text" class="form-control" v-model="code"></div>
 					</div>
 				</div>
-
-				<div class="col-md-3 col-md-offset-1" style="visibility:hidden">
-					<label>上传头像:</label><input id="fileUpload" ref="fileUpload" type="file" @change="onFileChange" style="display:inline-block;max-width:180px;margin-left:10px">
-				</div>
 			</div>
 			<div class="panel panel-default margint">
 				<div class="panel-heading"><label>所需使用的药物</label></div>
@@ -45,7 +41,6 @@
 					</div>
 				</div>
 			</div>	
-			
 			<div class="row margint" style="max-height: 350px;overflow-y: scroll;">
 				<div class="col-md-4" v-for=" medicalInfo in medicalList" >
 					<medical-panel :data="medicalInfo" :edit="true" @delete="deletePanel(medicalInfo)" @delete-medical="deleteMedical(medicalInfo, $event)"></medical-panel>
@@ -53,7 +48,7 @@
 			</div>
 		</div>	
 		<div class="col-md-3">
-			<a class="thumbnail" @click="uploadFile()"> <img id="header" src="img/panda.jpg" style="height: 180px; width:100%" data-holder-rendered="true"> </a>
+			<a class="thumbnail"> <img id="header" :src="img" style="height: 180px; width:100%" data-holder-rendered="true"> </a>
 		</div>
 	</div>
 	<hr>
@@ -73,7 +68,7 @@ export default {
 	name :'add-prison-medical',
 	data(){
 		return {
-			qualifiedTime:["早餐前","早餐后","午餐前","午餐后","晚餐前","晚餐后","临睡前"],
+			
 			medicalInfo:{
 				time:"",
 				num:""
@@ -92,43 +87,17 @@ export default {
 					
 			]*/,
 			code:this.prison.code,
-			imageData:this.prison.img,
 			showAlert:false,
 			alertClass:  "alert-danger",
 			alertMsg :''
 		}
 	},
 	methods:{
-		onFileChange: function(event){
-			var input = event.target;
-            // Ensure that you have a file before attempting to read it
-            if (input.files && input.files[0]) {
-                // create a new FileReader to read this image and convert to base64 format
-                var reader = new FileReader();
-                // Define a callback function to run, when FileReader finishes its job
-                reader.onload = (e) => {
-                    // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
-                    // Read image as base64 and set to imageData
-                    this.imageData = e.target.result;
-                    //use formData to upload file
-                }
-                // Start the reader job - read file as a data url (base64 format)
-                reader.readAsDataURL(input.files[0]);
-            }
-		},
 		deleteMedical: function(medicalInfo, data){
 			console.info("handle delete medical:" + JSON.stringify(data));
 			medicalInfo.medicalList = _.filter(medicalInfo.medicalList, function(m){
-				return m.name != data.name
+				return m.medical != data.name
 			});
-			if(medicalInfo.medicalList.length == 0){
-				this.medicalList = _.filter(this.medicalList, function(m){
-					return m.time != medicalInfo.time
-				})
-			}
-		},
-		uploadFile:function(){
-			this.$refs.fileUpload.click()
 		},
 		selectDropDown: function(value){
 			this.medicalInfo.time = value;
@@ -170,7 +139,9 @@ export default {
 				this.medicalList.push(tempMedicalInfo)
 			}
 			this.medicalList = _.sortBy(this.medicalList, function(m){
-				return self.qualifiedTime.indexOf(m.time)
+				console.info("current index" + window.qualifiedTime.indexOf(m.time))
+
+				return window.qualifiedTime.indexOf(m.time)
 			})
 		},
 		saveMedicalInfo: function(){
@@ -230,7 +201,6 @@ export default {
 		if(id){
 			this.code = id;
 			this.$http.get('inmate/medical/' + id).then((res)=>{
-			this.imageData = 'img/panda.jpg'
 			var tempObject = _.groupBy(res.body, 'time')
 			for(var time in tempObject){
 				this.medicalList.push({
@@ -238,7 +208,18 @@ export default {
 					'medicalList': tempObject[time]
 				})
 			}
+			var self = this
+			this.medicalList = _.sortBy(this.medicalList, function(m){
+				console.info("current index" + self.qualifiedTime.indexOf(m.time))
+				return self.qualifiedTime.indexOf(m.time)
+			})
 		})
+		}
+
+	},
+	computed: {
+		img: function(){
+			return 'img/head/' + this.code + ".png"
 		}
 	}
 }

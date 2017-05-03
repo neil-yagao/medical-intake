@@ -9,6 +9,7 @@ import org.springframework.integration.annotation.Poller;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.annotation.Transformer;
 import org.springframework.integration.channel.DirectChannel;
+import org.springframework.integration.config.EnableIntegrationManagement;
 import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.file.FileNameGenerator;
 import org.springframework.integration.file.FileReadingMessageSource;
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter;
  * Created by nhu on 4/23/2017.
  */
 @Component
+@EnableIntegrationManagement(defaultLoggingEnabled = "true")
 public class VideoRename {
 
     private Logger LOGGER = LoggerFactory.getLogger(VideoRename.class);
@@ -76,7 +78,7 @@ public class VideoRename {
             @Override
             public String generateFileName(Message<?> message) {
                 LocalDateTime datetime = LocalDateTime.now();
-                return datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd(HH-mm)")) + ".webm";
+                return datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd(HH-mm-ss)")) + ".webm";
             }
         });
         return handler;

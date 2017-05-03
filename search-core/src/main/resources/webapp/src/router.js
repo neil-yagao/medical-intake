@@ -9,6 +9,7 @@ import MasterDataMain from './component/master-data/MasterDataMain.vue'
 import MasterDataMedical from './component/master-data/MasterDataMedical.vue'
 import MasterDataInmate from './component/master-data/MasterDataInmate.vue'
 import UploadFile from './component/master-data/UploadFile.vue'
+import RuntimeDataIntake from './component/master-data/IntakeRecords.vue'
 import VueRouter from 'vue-router'
 
 const routes = [{
@@ -32,6 +33,9 @@ const routes = [{
         }, {
             path: "inmate",
             component: MasterDataInmate
+        }, {
+            path: "intake",
+            component: RuntimeDataIntake
         }]
     }, {
         path: 'detail/:id',
@@ -101,7 +105,7 @@ function showVideoRecordWindow() {
     if (!vedioRecording) {
         vedioRecording = true;
         console.info("url:" + window.location.href)
-        var child = window.open('http://localhost:18080/#/recording', '_blank',
+        var child = window.open('http://localhost:8080/#/recording', '_blank',
             'location=yes,height=400,width=500,scrollbars=yes,status=yes,left=' + x + ',top=' + y);
         var timer = setInterval(
             () => {

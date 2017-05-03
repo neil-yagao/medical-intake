@@ -13,9 +13,10 @@ require("bootstrap")
 Vue.use(VueRouter)
 Vue.use(VueResource)
 
+
 window._ = require('lodash');
 
-
+window.qualifiedTime = ["早餐前", "早餐后", "午餐前", "午餐后", "晚餐前", "晚餐后", "临睡前"]
 new Vue({ // eslint-disable-line no-new
     router
 }).$mount('#app')

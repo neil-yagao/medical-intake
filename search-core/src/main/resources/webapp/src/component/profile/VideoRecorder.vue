@@ -11,7 +11,7 @@
 			</div>
 		</div>
 		<div class="row" style="margin-top:20px">
-			<video id="recording" width="400" height="300" :src="video"></video>
+			<video id="recording" width="400" height="300" autoplay></video>
 		</div>
 	</div>
 </template>
@@ -33,11 +33,6 @@ export default {
 	    	blobs:[]
 		}
 	},
-	computed: {
-		video: function(){
-			return this.stream == ""? "": window.URL.createObjectURL(this.stream)
-		}
-	},
 	methods: {
 		captureUserMedia: function(mediaConstraints, successCallback, errorCallback) {
             navigator.mediaDevices.getUserMedia(mediaConstraints).then(successCallback).catch(errorCallback);
@@ -47,28 +42,45 @@ export default {
         	this.recording = true;
         	this.savable = false;
         },
-        stop: function(){
-        	this.mediaRecorder.stop();
-        	this.recording = false;
-        	this.savable = true;	
-        	this.mediaRecorder.save()
+        stop: function() {
+            this.mediaRecorder.stop();
+            this.recording = false;
+            this.savable = true;
+            var blob = new Blob(this.blobs, {
+                type: 'video/webm'
+            });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+			document.body.appendChild(a);
+            a.download = 'recording.webm';
+            a.click();
+            setTimeout(function() {
+			    document.body.removeChild(a);
+			    window.URL.revokeObjectURL(url);
+			  }, 100);
         },
         onMediaSuccess:function (stream) {
             var video = document.getElementById('recording');
-            this.stream = stream
+            video.src = URL.createObjectURL(stream);
             setTimeout(_ => {
             	video.play();
             }, 100)
+            this.blobs = []
             if(!window.localStorage.getItem('identity')){
             	this.stop();
             }
-            this.mediaRecorder = new MediaStreamRecorder(stream);
-            this.mediaRecorder.stream = stream;
-
+            this.mediaRecorder = new MediaRecorder(stream,{mimeType: 'video/webm'})
+            this.mediaRecorder.ondataavailable = (event) =>{
+            	if (event.data && event.data.size > 0) {
+			    	this.blobs.push(event.data);
+			    }
+            }
             this.mediaRecorder.videoWidth = 400;
             this.mediaRecorder.videoHeight = 300;
-
-            this.mediaRecorder.start(5*1000);
+            console.info("starting recording!")
+            this.mediaRecorder.start(1000);
 
         },
         onMediaError:function(e) {

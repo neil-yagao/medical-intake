@@ -28,16 +28,10 @@ public class PrisonMedicalController {
 
     @RequestMapping(value = "inmate/medical/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public List<PrisonMedicalInfo> getPrisonMedicalInfo(@PathVariable String code) {
+    public List<JSONObject> getPrisonMedicalInfo(@PathVariable String code) {
         return prisonMedicalService.getPrisonMedicalInfo(code);
     }
 
-    @RequestMapping(value = "inmate/intake/{code}", method = RequestMethod.POST)
-    @ResponseBody
-    public JSONObject inmateMedicalIntake(@PathVariable String code) {
-        prisonMedicalService.inmateConfirmMedicalIntake(code);
-        return new JSONObject();
-    }
 
 
 }

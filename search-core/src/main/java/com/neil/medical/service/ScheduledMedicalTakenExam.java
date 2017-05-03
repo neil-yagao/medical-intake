@@ -18,14 +18,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.neil.medical.service.PrisonIntakeRecord.INTAKE_RECORD_COLLECTION;
+import static com.neil.medical.service.PrisonMedicalService.INMATE_REQUIRED_MEDICAL_COLLECTION;
+
 /**
  * Created by nhu on 4/22/2017.
  */
 @Component
 @EnableScheduling
-public class MedicalTakenExam {
+public class ScheduledMedicalTakenExam {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MedicalTakenExam.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduledMedicalTakenExam.class);
 
     @Autowired
     private MongoTemplate template;
@@ -46,7 +49,7 @@ public class MedicalTakenExam {
     public void reduceMedicalNumber(int currentHour) {
         Map<String, List<Integer>> intakeRecording = findIntakedRecording();
         for (String prisonCode : intakeRecording.keySet()) {
-            DBCursor cursor = template.getCollection("inmate-medical")
+            DBCursor cursor = template.getCollection(INMATE_REQUIRED_MEDICAL_COLLECTION)
                     .find(new BasicDBObject("code", prisonCode).append("time", new BasicDBObject("$in", getPredefineList(currentHour))));
             while (cursor.hasNext()) {
                 BasicDBObject data = (BasicDBObject) cursor.next();
@@ -78,7 +81,7 @@ public class MedicalTakenExam {
     private Map<String, Set<String>> getNeedMedicalList(int currentHour) {
         List<String> timeSpan = getPredefineList(currentHour);
         Map<String, Set<String>> medicalRecord = new HashMap<>();
-        DBCursor cursor = template.getCollection("inmate-medical")
+        DBCursor cursor = template.getCollection(INMATE_REQUIRED_MEDICAL_COLLECTION)
                 .find(new BasicDBObject("time", new BasicDBObject("$in", timeSpan)));
         while (cursor.hasNext()) {
             JSONObject object = new JSONObject((BasicDBObject) cursor.next());
@@ -95,7 +98,7 @@ public class MedicalTakenExam {
     //return code : intaking hours
     private Map<String, List<Integer>> findIntakedRecording() {
         Map<String, List<Integer>> intakeRecording = new HashMap<>();
-        DBCursor cursor = template.getCollection(PrisonMedicalService.INTAKE_RECORD_COLLECTION)
+        DBCursor cursor = template.getCollection(INTAKE_RECORD_COLLECTION)
                 .find(new BasicDBObject("checked", false));
         while (cursor.hasNext()) {
             JSONObject object = new JSONObject((BasicDBObject) cursor.next());
@@ -113,7 +116,7 @@ public class MedicalTakenExam {
 
     private void setIntakeRecordingChecked(Map<String, List<Integer>> intakeRecording) {
         for (String code : intakeRecording.keySet()) {
-            template.getCollection(PrisonMedicalService.INTAKE_RECORD_COLLECTION).update(
+            template.getCollection(INTAKE_RECORD_COLLECTION).update(
                     new BasicDBObject("code", code).append("checked", false),
                     new BasicDBObject("$set", new BasicDBObject("checked", true)),
                     new DBCollectionUpdateOptions().multi(true)

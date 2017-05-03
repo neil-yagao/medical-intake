@@ -31,7 +31,7 @@ export default {
 		},
 		deleteMedical: function(medical){
 			console.info("delete:" + JSON.stringify(medical))
-			this.$emit('delete-medical', {name: medical.medical})
+			this.$emit('delete-medical', {name: medical.medical, time: this.data.time})
 		}
 	}
 }	
