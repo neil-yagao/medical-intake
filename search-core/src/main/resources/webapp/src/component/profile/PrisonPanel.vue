@@ -57,8 +57,7 @@ export default {
                     return val.time == this.inmates.time
                 })
             }
-            console.info(resultList)
-            return _.uniqBy(resultList, 'code')
+            return _.uniqBy(resultList, 'code').slice(0, 10)
         }
     }
 }

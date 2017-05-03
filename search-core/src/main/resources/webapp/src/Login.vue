@@ -1,7 +1,7 @@
 <template>
     <div class="text-center" style="padding:50px 0">
     <img src="img/jh.png" id="login-background"/>
-        <div class="logo">南京监狱服药监督管理系统</div>
+        <div class="logo">南京监狱服药管理系统</div>
         <div class="login-form-1">
             <div id="login-form" class="text-left">
                 <div class="login-form-main-message"></div>

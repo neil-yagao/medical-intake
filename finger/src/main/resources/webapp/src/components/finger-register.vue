@@ -29,7 +29,7 @@
                 </div>
                  <div class="col-md-offset-2 col-md-3" style="top: -60px; position: relative">
                     <video id="video"></video>
-                    <button id="startbutton" @click="takepicture()" :disabled="code.length == 0">Take photo</button>
+                    <button id="startbutton" @click="takepicture()" :disabled="code.length == 0">拍摄</button>
                 </div>
                 <div class="col-md-3" style="top: -60px; position: relative">
                     <img id="photo" alt="" :src="headPic">

@@ -3,29 +3,25 @@
   		<hr>
 		<div class="row">
 			<div class="col-md-2">
-				<a class="thumbnail">
+				<a class="thumbnail" style="background-color:rgba(255, 255, 252, 0.6)">
 					<img :src="img" data-holder-rendered="true"> 
 					<div class="caption text-center">
 			    		<p>{{currentCode}}</p>
-			    		<p><button class="btn btn-info" @click="goBack()" v-if="this.identity == 'police'">返回</button></p>
+			    		<button class="btn btn-info" @click="goBack()" v-if="this.identity == 'police'">
+			    			<span class="glyphicon glyphicon-arrow-left"></span>
+			    		</button>
+			    		<button class="btn btn-danger btn-small"  @click="editProfile()" v-if='identity == "police"'>
+							<span class="glyphicon glyphicon-edit"></span>
+						</button>
 			    	</div>
 				</a>
 			</div>
 			<div class="col-md-8">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title" style="display:inline-block">需服用药物</h3>
-						<button class="btn btn-warning btn-xs" style="float:right" @click="editProfile()" v-if='identity == "police"'>编辑</button>
-					</div>
-					<div class="panel-body">
-						<div class="row" style="max-height: 500px;overflow-y: scroll;">
-							<div class="col-md-6" v-for=" medicalInfo in medicalList" >
-							<medical-panel :data="medicalInfo" :edit="false"></medical-panel>
-						</div>
-						</div>
+				<div class="row" style="max-height: 500px;overflow-y: scroll;">
+					<div class="col-md-4" v-for=" medicalInfo in medicalList" >
+						<medical-panel :data="medicalInfo" :edit="false"></medical-panel>
 					</div>
 				</div>
-				
 			</div>
 		</div>
 	</div>
@@ -115,5 +111,4 @@ export default {
 </script>
 
 <style>
-	
 </style>
