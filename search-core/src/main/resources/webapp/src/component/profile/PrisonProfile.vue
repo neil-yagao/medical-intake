@@ -61,6 +61,7 @@ export default {
             this.$http.get('inmate/medical/' + id).then((res) => {
                 this.img = 'img/head/' + id + ".png"
                 var tempObject = _.groupBy(res.body, 'time')
+                console.info(tempObject)
                 this.medicalList = []
                 for (var time in tempObject) {
                     this.medicalList.push({
@@ -68,10 +69,13 @@ export default {
                         'medicalList': tempObject[time]
                     })
                 }
+                this.medicalList = _.sortBy(this.medicalList, function(m){
+					return window.qualifiedTime.indexOf(m.time)
+				})
                 if (this.identity == 'prison') {
                     var matching = this.findMatchingMedicalList(tempObject);
                     console.info(matching)
-                    this.$http.post('inmate/intake/' + id).then((res) => {
+                    this.$http.post('inmate/intake/' + id, JSON.stringify(_.compact(matching))).then((res) => {
                         console.info("confirm:" + id)
                     })
                 }
@@ -84,10 +88,9 @@ export default {
             if (object[time]) {
                 return object[time]
             }
-            var range = "";
             if (time <= 9) {
                 return _.concat(object["早餐前"], object["早餐后"])
-            } else if (time <= 13) {
+            } else if (time <= 14) {
                 return _.concat(object["午餐前"], object["午餐后"])
             } else if (time <= 19) {
                 return _.concat(object["晚餐前"], object["晚餐后"])

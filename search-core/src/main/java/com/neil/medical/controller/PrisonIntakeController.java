@@ -46,8 +46,8 @@ public class PrisonIntakeController {
 
     @RequestMapping(value = "inmate/intake/{code}", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject inmateMedicalIntake(@PathVariable String code) {
-        intakeRecord.inmateConfirmMedicalIntake(code);
+    public JSONObject inmateMedicalIntake(@PathVariable String code, @RequestBody List<JSONObject> medicals) {
+        intakeRecord.inmateConfirmMedicalIntake(code, medicals);
         return new JSONObject();
     }
 }

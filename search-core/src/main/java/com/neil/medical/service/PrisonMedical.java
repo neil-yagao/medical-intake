@@ -14,7 +14,7 @@ import java.util.List;
  * Created by nhu on 4/9/2017.
  */
 @Service
-public class PrisonMedicalService {
+public class PrisonMedical {
 
     public static final String INMATE_REQUIRED_MEDICAL_COLLECTION = "inmate-medical";
 

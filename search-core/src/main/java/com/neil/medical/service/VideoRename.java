@@ -45,7 +45,7 @@ public class VideoRename {
     }
 
     @Bean
-    @InboundChannelAdapter(value = "fileInputChannel", poller = @Poller(fixedDelay = "60000"))
+    @InboundChannelAdapter(value = "fileInputChannel", poller = @Poller(fixedDelay = "10000"))
     public MessageSource<File> fileReadingMessageSource() {
         FileReadingMessageSource source = new FileReadingMessageSource();
         source.setDirectory(new File(directoryToWatch + "/img/head"));

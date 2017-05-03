@@ -48,7 +48,7 @@
 			</div>
 		</div>	
 		<div class="col-md-3">
-			<a class="thumbnail"> <img id="header" :src="img" style="height: 180px; width:100%" data-holder-rendered="true"> </a>
+			<a class="thumbnail"> <img id="header" :src="img" alt="输入编号后自动加载" style="height: 180px; width:100%"> </a>
 		</div>
 	</div>
 	<hr>
@@ -89,7 +89,8 @@ export default {
 			code:this.prison.code,
 			showAlert:false,
 			alertClass:  "alert-danger",
-			alertMsg :''
+			alertMsg :'',
+			qualifiedTime: window.qualifiedTime
 		}
 	},
 	methods:{
@@ -210,7 +211,6 @@ export default {
 			}
 			var self = this
 			this.medicalList = _.sortBy(this.medicalList, function(m){
-				console.info("current index" + self.qualifiedTime.indexOf(m.time))
 				return self.qualifiedTime.indexOf(m.time)
 			})
 		})
@@ -219,7 +219,10 @@ export default {
 	},
 	computed: {
 		img: function(){
-			return 'img/head/' + this.code + ".png"
+			if(this.code){
+				return 'img/head/' + this.code + ".png"
+			}
+			return ""
 		}
 	}
 }

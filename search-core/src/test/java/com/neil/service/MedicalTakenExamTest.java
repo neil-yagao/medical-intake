@@ -29,8 +29,4 @@ public class MedicalTakenExamTest extends AbstractTestNGSpringContextTests {
         exam.persistentMissingRecord(missing);
     }
 
-    @Test
-    public void checkReduce() {
-        exam.reduceMedicalNumber(19);
-    }
 }

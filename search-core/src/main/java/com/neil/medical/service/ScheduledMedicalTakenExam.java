@@ -5,7 +5,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
-import com.neil.medical.pojo.Medical;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static com.neil.medical.service.PrisonIntakeRecord.INTAKE_RECORD_COLLECTION;
-import static com.neil.medical.service.PrisonMedicalService.INMATE_REQUIRED_MEDICAL_COLLECTION;
+import static com.neil.medical.service.PrisonMedical.INMATE_REQUIRED_MEDICAL_COLLECTION;
 
 /**
  * Created by nhu on 4/22/2017.
@@ -43,21 +42,6 @@ public class ScheduledMedicalTakenExam {
         int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         List<JSONObject> missing = calculateTheMissingRecords(currentHour);
         persistentMissingRecord(missing);
-        reduceMedicalNumber(currentHour);
-    }
-
-    public void reduceMedicalNumber(int currentHour) {
-        Map<String, List<Integer>> intakeRecording = findIntakedRecording();
-        for (String prisonCode : intakeRecording.keySet()) {
-            DBCursor cursor = template.getCollection(INMATE_REQUIRED_MEDICAL_COLLECTION)
-                    .find(new BasicDBObject("code", prisonCode).append("time", new BasicDBObject("$in", getPredefineList(currentHour))));
-            while (cursor.hasNext()) {
-                BasicDBObject data = (BasicDBObject) cursor.next();
-                Medical medical = new Medical(data.getString("medical"), (0 - data.getDouble("amount")));
-                medicalInfo.insertOrUpdateMedicalInfo(Collections.singletonList(medical));
-            }
-
-        }
     }
 
     public void persistentMissingRecord(List<JSONObject> missing) {
