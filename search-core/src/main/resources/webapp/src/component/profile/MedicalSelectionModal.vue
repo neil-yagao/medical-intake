@@ -61,7 +61,7 @@ export default {
 				if(!this.medical) return true;
 				return me.name.indexOf(this.medical) >=0
 			})
-			return _.orderBy(matchingList,'num','asc').slice(0,5);
+			return _.orderBy(matchingList,'name','asc').slice(0,5);
 		},
 		medicals: function(){
 			var m = ""

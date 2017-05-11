@@ -35,7 +35,7 @@ public class ScheduledMedicalTakenExam {
     @Autowired
     private MedicalInfo medicalInfo;
 
-    @Scheduled(cron = "0 0 9,13,19,23 * * *")
+    @Scheduled(cron = "0 0 9,13,20,23 * * *")
     public void examineIntakeRecord() {
         LOGGER.info("exam medical intake");
         Calendar calendar = new GregorianCalendar(Locale.CHINA);
@@ -146,9 +146,9 @@ public class ScheduledMedicalTakenExam {
         //now we only exam the time
         //ignore the medical matching for now
         if (needTime.equals("早餐后") || needTime.equals("早餐前")) {
-            return intakeTime <= 9 && intakeTime >= 6;
+            return intakeTime <= 9;
         } else if (needTime.equals("午餐前") || needTime.equals("午餐后")) {
-            return intakeTime >= 11 && intakeTime <= 13;
+            return intakeTime >= 10 && intakeTime <= 13;
         } else if (needTime.equals("晚餐前") || needTime.equals("晚餐后")) {
             return intakeTime >= 17 && intakeTime <= 19;
         } else if (needTime.equals("临睡前")) {

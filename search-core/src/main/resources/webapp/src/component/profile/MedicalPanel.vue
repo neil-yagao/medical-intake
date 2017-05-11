@@ -4,7 +4,7 @@
 		<!-- Default panel contents -->
 			<div class="panel-heading">服药时间：{{data.time}}<span style="float:right" class="glyphicon glyphicon-remove" @click="deletePanel()" v-if="edit"></span></div>
 			  <!-- Table -->
-		  	<div class="panel-body panel-transparent">
+		  	<div class="panel-body">
 				<table class="table">
 					<thead>
 						<tr><td>#</td><td>药物</td><td>数量</td><td v-if="edit"></td></tr>
@@ -36,6 +36,7 @@ export default {
 			this.$emit('delete-medical', {name: medical.medical, time: this.data.time})
 		}
 	}
+
 }	
 </script>
 
@@ -44,11 +45,7 @@ export default {
 	margin-top:10px;
 }
 .panel-transparent {
-    background: none;
-}
-
-
-.panel-transparent .panel-body{
     background: rgba(255, 255, 252, 0.6)!important;
 }
+
 </style>

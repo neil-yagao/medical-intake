@@ -12,17 +12,20 @@
         <div class="col-md-4">
             <input type="text" v-model="code" class="form-control">
         </div>
-        <div class="col-md-2" v-show="this.code">
+        <div class="col-md-2" >
             <date-picker :date="startDate" :option="option" ></date-picker>
         </div>
-        <div class="col-md-2" v-show="this.code">
+        <div class="col-md-2" >
             <date-picker :date="endDate" :option="option" :limit="endLimit"></date-picker>
         </div>
-        <div class="col-md-1" v-show="this.startDate.time">
-            <button class="btn btn-default" @click="passingCondition()">搜索</button>
+        <div class="col-md-1" v-show="this.startDate.time || this.code">
+            <button class="btn btn-default" @click="passingCondition()"><span class="glyphicon glyphicon-search"></span></button>
+        </div>
+        <div class="col-md-1">
+        	<button class="btn btn-default" @click="startDownload()"><span class="glyphicon glyphicon-download-alt"></span></button>
         </div>
     </div>
-    <result-panel :condition="queryCondition"></result-panel>
+    <result-panel :condition="queryCondition" :flag="downloadFlag"></result-panel>
 </div>
 </template>
 <script>
@@ -36,7 +39,7 @@ export default {
         return {
             code: '',
             startDate: {
-            	time:''
+            	time:moment().format('YYYY-MM-DD')
             },
             endDate:{
             	time:''
@@ -68,7 +71,8 @@ export default {
             },
             queryCondition:{
             	'timespan':':'
-            }
+            },
+            downloadFlag:false
         }
     },
     methods: {
@@ -82,12 +86,18 @@ export default {
             }
             return "临睡前"*/
             this.queryCondition = {
-            	'code': this.code,
+            	'code': this.code?this.code:'all',
             	'timespan':this.startDate.time + ":" + this.endDate.time
             }
         },
         selectDropDown(value) {
             this.time = value
+        },
+        startDownload(){
+        	this.downloadFlag = true;
+        	setTimeout(()=>{
+        		this.downloadFlag = false;
+        	}, 5000)
         }
     },
     computed: {

@@ -64,10 +64,7 @@ export default {
 </script>
 <style>
 .thumbnail-transparent {
-	 background: none;
+	 background: rgba(255, 255, 252, 0.6)!important;
 }
 
-.panel-transparent .thumbnail{
-	background: rgba(122, 130, 136, 0.2)!important;
-}
 </style>

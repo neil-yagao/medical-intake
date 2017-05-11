@@ -19,11 +19,7 @@
 <script>
 var FileSaver = require('file-saver');
 import XLSX from "xlsx"
-function Workbook() {
-	if(!(this instanceof Workbook)) return new Workbook();
-	this.SheetNames = [];
-	this.Sheets = {};
-}
+
 export default {
     name: 'master-data',
     data() {
