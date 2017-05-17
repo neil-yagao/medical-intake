@@ -8,7 +8,7 @@
             <h4>出库时间</h4>
         </div>
         <div class="col-md-1">
-        	<button class="btn btn-default"<!--  @click="downloadRecords()" -->><span class="glyphicon glyphicon-download-alt"></span></button>
+        	<button class="btn btn-default"  @click="downloadRecords()"><span class="glyphicon glyphicon-download-alt"></span></button>
         </div>
     </div>
     <code-and-timespan @condition-query="passingCondition($event)"></code-and-timespan>
@@ -62,25 +62,41 @@ export default {
 				var groupedRecords = _.groupBy(res.body,function(m){
 					return m.medical + ":" + m.date
 				})
-				console.info(groupedRecords)
-				/*for(var i in res.body){
-					var rawRecord = 
-				}*/
+				for(var key in groupedRecords){
+					var rawRecords = groupedRecords[key];
+					console.info(key);
+					console.info(rawRecords)
+					var medical = key.split(":")[0]
+					var date = key.split(":")[1];
+					var totalAmount = 0;
+					var usedBy = ""
+					for(var i in rawRecords){
+						console.info(rawRecords[i])
+						totalAmount += rawRecords[i].amount;
+						usedBy = usedBy? (usedBy + "," + rawRecords[i].prison): rawRecords[i].prison
+					}
+					this.outboundRecords.push({
+						'medical':medical,
+						'amount':totalAmount,
+						'date':date,
+						'prison': usedBy
+					})
+				}
 			})
 		},
 		downloadRecords(){
-			if(this.inboundRecords.length == 0){
+			if(this.outboundRecords.length == 0){
 				return
 			}
-			var sheet = [["药物名称","入库数量","入库日期"]]
-			for(var i in this.inboundRecords){
-				var record = this.inboundRecords[i];
-				sheet.push([record.medical, record.amount, record.date])
+			var sheet = [["药物名称","出库数量","出库日期","使用人员"]]
+			for(var i in this.outboundRecords){
+				var record = this.outboundRecords[i];
+				sheet.push([record.medical, record.amount, record.date, record.prison])
 			}
 			var wb = {};
-			wb['入库记录'] = sheet;
+			wb['出库记录'] = sheet;
 			var now = moment().format("YYYY-MM-DD")
-            Vue.exportToExcel(wb,"入库记录" + now + ".xlsx")
+            Vue.exportToExcel(wb,"出库记录" + now + ".xlsx")
 		}
 	},
     components: {
