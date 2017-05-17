@@ -13,7 +13,6 @@ require("bootstrap")
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(ExcelHelper)
-console.info(ExcelHelper)
 window._ = require('lodash');
 
 window.qualifiedTime = ["早餐前", "早餐后", "午餐前", "午餐后", "晚餐前", "晚餐后", "临睡前"]

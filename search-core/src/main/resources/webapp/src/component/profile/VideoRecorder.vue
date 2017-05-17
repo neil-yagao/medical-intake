@@ -41,6 +41,7 @@ export default {
         	this.captureUserMedia(this.mediaConstraints, this.onMediaSuccess, this.onMediaError)
         	this.recording = true;
         	this.savable = false;
+        	console.info("starting")
         },
         stop: function() {
             this.mediaRecorder.stop();
@@ -79,7 +80,6 @@ export default {
             }
             this.mediaRecorder.videoWidth = 400;
             this.mediaRecorder.videoHeight = 300;
-            console.info("starting recording!")
             this.mediaRecorder.start(1000);
 
         },
@@ -91,6 +91,24 @@ export default {
 		if(!this.recording){
 			this.start()
 		}
+		var interval = setInterval(()=>{
+			var lastUsed = window.localStorage.getItem('last-usage');
+			console.info(lastUsed);
+			if(lastUsed){
+				var now = Math.floor(Date.now() / 1000);
+				var duration = now - lastUsed;
+				if(this.recording){
+					if(duration >= 600){
+						//automatic download
+						this.stop();
+						window.localStorage.setItem('last-usage','')
+						clearInterval(interval)
+					}
+				}else{
+					this.start()
+				}
+			}
+		}, 1000)
 	}
 }
 

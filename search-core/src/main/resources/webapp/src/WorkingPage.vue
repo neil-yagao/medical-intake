@@ -11,11 +11,17 @@
                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
             </a>
         </li>
-        <li role="presentation" :class="this.$route.path.indexOf('data-edit') >= 0?'active':''" title="基本配置">
+        <li role="presentation" :class="this.$route.path.indexOf('data-edit') >= 0?'active':''" title="服药记录">
             <a href="#/working/data-edit" class="btn-lg">
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
             </a>
         </li>
+        <li role="presentation" :class="this.$route.path.indexOf('medical-inventory') >= 0?'active':''" title="药物管理">
+            <a href="#/working/medical-inventory/overall" class="btn-lg">
+                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
+            </a>
+        </li>
+        <!--  -->
         <li role="presentation" title="注册" style="float:right">
             <a href="http://localhost:8090/"  target="_blank" class="btn-lg">
                 <span class="glyphicon glyphicon-user" aria-hidden="true" style="color:#121cea"></span>

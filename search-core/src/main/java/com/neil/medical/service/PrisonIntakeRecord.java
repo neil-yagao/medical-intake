@@ -4,10 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.neil.medical.pojo.Medical;
+import com.neil.medical.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,17 +23,18 @@ public class PrisonIntakeRecord {
     public static final String INTAKE_RECORD_COLLECTION = "intake_records";
 
     @Autowired
-    private WrappedMongoTemplate<JSONObject> template;
+    private WrappedMongoTemplate template;
 
     @Autowired
     private MongoTemplate rawTemplate;
 
     @Autowired
-    private MedicalInfo medicalInfo;
+    private MedicalInventory medicalInventory;
 
     public void inmateConfirmMedicalIntake(String code, List<JSONObject> medicals) {
         template.save(INTAKE_RECORD_COLLECTION, new JSONObject().fluentPut("code", code)
                 .fluentPut("timestamp", new Date().getTime())
+                .fluentPut("date", TimeUtil.getCurrentDate())
                 .fluentPut("medicals", medicals)
                 .fluentPut("checked", false));
         //reduce medical num
@@ -38,7 +42,7 @@ public class PrisonIntakeRecord {
         for (JSONObject data : medicals) {
             usedMedical.add(new Medical(data.getString("medical"), (0 - data.getDouble("amount"))));
         }
-        medicalInfo.insertOrUpdateMedicalInfo(usedMedical);
+        medicalInventory.insertOrUpdateMedicalInfo(usedMedical, code);
     }
 
     public List<JSONObject> getPrisonIntakeRecord(String code, String timespan) {
@@ -46,12 +50,10 @@ public class PrisonIntakeRecord {
         if (!code.equalsIgnoreCase("all")) {
             queryCondition.put("code", code);
         }
-        String[] times = timespan.split(":");
-        DBObject timespanRange = new BasicDBObject().append("$gte", Long.parseLong(times[0]));
-        if (times.length > 1) {
-            timespanRange.put("$lte", Long.parseLong(times[1]));
-        }
-        queryCondition.put("timestamp", timespanRange);
+        JSONObject timespanRange = TimeUtil.parseTimespan(timespan);
+        queryCondition.put("timestamp", new BasicDBObject(timespanRange));
         return template.getListFromCursor(rawTemplate.getCollection(INTAKE_RECORD_COLLECTION).find(queryCondition));
     }
+
+
 }

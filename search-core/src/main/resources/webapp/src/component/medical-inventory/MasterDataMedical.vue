@@ -40,7 +40,12 @@ export default {
 	},
 	methods:{
 		updateMedicalData: function(medical, num){
+			var different = num - medical.num
 			medical.num = num
+			this.$http.post('medicals',[{
+				'name':medical.name,
+				'num':different
+			}])
 		}
 	},
 	mounted:function(){

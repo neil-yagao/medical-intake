@@ -5,6 +5,7 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBCursor;
 import com.mongodb.DuplicateKeyException;
 import com.mongodb.client.model.DBCollectionUpdateOptions;
+import com.neil.medical.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class ScheduledMedicalTakenExam {
     private MongoTemplate template;
 
     @Autowired
-    private MedicalInfo medicalInfo;
+    private MedicalInventory medicalInventory;
 
     @Scheduled(cron = "0 0 9,13,20,23 * * *")
     public void examineIntakeRecord() {
@@ -132,9 +133,7 @@ public class ScheduledMedicalTakenExam {
                     record.put("need", r);
                     record.put("checked", false);
                     record.put("time", new Date().getTime());
-                    LocalDateTime datetime = LocalDateTime.now();
-                    record.put("date",
-                            datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    record.put("date", TimeUtil.getCurrentDate());
                     missingRecord.add(record);
                 }
             }

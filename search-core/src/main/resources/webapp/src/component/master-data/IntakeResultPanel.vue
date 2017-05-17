@@ -63,20 +63,8 @@ export default {
     props: ['condition', 'flag'],
     watch: {
         condition: function() {
-            console.info(this.condition)
-            var timespan = this.condition.timespan.split(":");
-            var start, end = ""
-            if (timespan[0]) {
-                start = moment(timespan[0], 'YYYY-MM-DD')
-            } else {
-                return
-            }
-            if (timespan[1]) {
-                end = moment(timespan[1], 'YYYY-MM-DD')
-            }
-            timespan = start + ":" + end
+            var timespan = this.condition.timespan;
             this.$http.get('intake/' + this.condition.code + "/" + timespan).then((res) => {
-                console.info(res.body)
                 this.candidates = []
                 _.forEach(res.body, (r) => {
                     this.candidates.push({
@@ -92,6 +80,9 @@ export default {
         },
         flag: function() {
             if (this.flag) {
+            	if(this.candidates.length == 0){
+            		return 
+            	}
                 var groupedCandidate = _.groupBy(this.candidates, 'code')
                 var wb = {}
                 var heading = ["编号", "日期", "服药时间", "药物名称", "数量"]

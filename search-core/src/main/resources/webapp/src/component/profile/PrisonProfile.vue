@@ -27,7 +27,6 @@
 	</div>
 </template>
 <script>
-
 import MedicalPanel from './MedicalPanel.vue'
 import router from '../../router.js'
 import moment from "moment"
@@ -57,7 +56,6 @@ export default {
             this.$http.get('inmate/medical/' + id).then((res) => {
                 this.img = 'img/head/' + id + ".png"
                 var tempObject = _.groupBy(res.body, 'time')
-                console.info(tempObject)
                 this.medicalList = []
                 for (var time in tempObject) {
                     this.medicalList.push({
@@ -70,14 +68,12 @@ export default {
 				})
                 if (this.identity == 'prison') {
                     var matching = this.findMatchingMedicalList(tempObject);
-                    console.info(matching)
                     this.$http.post('inmate/intake/' + id, JSON.stringify(_.compact(matching))).then((res) => {
                         console.info("confirm:" + id)
                     })
                 }
-
             })
-
+            window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
         },
         findMatchingMedicalList(object) {
             var time = moment().hour()

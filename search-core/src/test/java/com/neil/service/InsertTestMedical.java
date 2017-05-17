@@ -2,7 +2,7 @@ package com.neil.service;
 
 import com.neil.medical.MedicalMatching;
 import com.neil.medical.pojo.Medical;
-import com.neil.medical.service.MedicalInfo;
+import com.neil.medical.service.MedicalInventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -21,7 +21,7 @@ import java.util.List;
 public class InsertTestMedical extends AbstractTestNGSpringContextTests {
 
     @Autowired
-    private MedicalInfo medicalInfo;
+    private MedicalInventory medicalInventory;
 
     @Test
     public void insertTestingMedical() {
@@ -29,6 +29,6 @@ public class InsertTestMedical extends AbstractTestNGSpringContextTests {
         for (int i = 0; i < 20; i++) {
             testingMedical.add(new Medical("药物" + i, i * 10.));
         }
-        medicalInfo.insertOrUpdateMedicalInfo(testingMedical);
+        medicalInventory.insertOrUpdateMedicalInfo(testingMedical, "");
     }
 }
