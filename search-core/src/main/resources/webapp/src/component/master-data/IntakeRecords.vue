@@ -19,6 +19,7 @@
 import CodeAndTimespan from '../general/CodeAndTimespan.vue';
 import ResultPanel from './IntakeResultPanel.vue';
 import _ from "lodash";
+import Vue from 'vue';
 export default {
     name: 'intake-records',
     data() {
@@ -44,9 +45,6 @@ export default {
         }
     },
     computed: {
-        qualifiedTime: function() {
-            return window.qualifiedTime;
-        },
         endLimit:function(){
         	return [{
         		type: 'fromto',

@@ -30,6 +30,7 @@
 import MedicalPanel from './MedicalPanel.vue'
 import router from '../../router.js'
 import moment from "moment"
+import Vue from 'vue'
 var states = ""
 export default {
     name: 'personal-profile',
@@ -64,7 +65,7 @@ export default {
                     })
                 }
                 this.medicalList = _.sortBy(this.medicalList, function(m){
-					return window.qualifiedTime.indexOf(m.time)
+					return Vue.qualifiedTime().indexOf(m.time)
 				})
                 if (this.identity == 'prison') {
                     var matching = this.findMatchingMedicalList(tempObject);

@@ -64,6 +64,7 @@ export default {
     		console.info(msg)
     		var infor = JSON.parse(msg.data)
     		window.localStorage.setItem('identity', infor.identity)
+    		window.localStorage.setItem('code', infor.code)
     		if(infor.identity == 'prison'){
     			window.location.href = "#/working/detail/" + infor.code;
     		}else if(infor.identity == 'police'){

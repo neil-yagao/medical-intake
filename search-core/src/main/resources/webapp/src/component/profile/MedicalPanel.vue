@@ -1,6 +1,6 @@
 <template>
 	<div class="margin">
-		<div class="panel panel-warning panel-transparent">
+		<div class="panel panel-transparent" :class="matchingTime(data.time)?'panel-info':'panel-warning'">
 		<!-- Default panel contents -->
 			<div class="panel-heading">服药时间：{{data.time}}<span style="float:right" class="glyphicon glyphicon-remove" @click="deletePanel()" v-if="edit"></span></div>
 			  <!-- Table -->
@@ -23,7 +23,8 @@
 	</div>
 </template>
 <script>
-import _ from "lodash"
+import _ from "lodash";
+import moment from 'moment';
 export default {
 	name:'medical-panel',
 	props:['data','edit'],
@@ -34,6 +35,9 @@ export default {
 		deleteMedical: function(medical){
 			console.info("delete:" + JSON.stringify(medical))
 			this.$emit('delete-medical', {name: medical.medical, time: this.data.time})
+		},
+		matchingTime(time){
+			var hour = moment().hour()
 		}
 	}
 

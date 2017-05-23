@@ -27,6 +27,7 @@
 </template>
 <script>
 import InmatePanel from '../profile/PrisonPanel.vue'
+import Vue from 'vue'
 export default {
     name: 'by-time-search',
     data() {
@@ -35,18 +36,14 @@ export default {
             key: '',
             time:"",
             matchingPrison:[],
-            totals:[]
+            totals:[],
+            qualifiedTime:Vue.qualifiedTime()
         }
     },
     methods: {
         selectDropDown: function(value){
 			this.time = value;
 		},
-    },
-    computed: {
-    	qualifiedTime:function(){
-    		return window.qualifiedTime
-    	}
     },
     components: {
         'prison-panel': InmatePanel

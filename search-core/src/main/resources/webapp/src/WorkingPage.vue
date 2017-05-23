@@ -1,6 +1,6 @@
 <template>
 <div>
-    <ul class="nav nav-tabs" v-if=" identity== 'police'">
+    <ul class="nav nav-tabs" v-if=" identity== 'police' || identity == 'medical'">
         <li role="presentation" :class="this.$route.path.indexOf('by-number') >= 0?'active':''" title="编号搜索">
             <a href="#/working/by-number" class="btn-lg">
                 <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
@@ -22,7 +22,7 @@
             </a>
         </li>
         <!--  -->
-        <li role="presentation" title="注册" style="float:right">
+        <li role="presentation" title="注册" style="float:right" v-if=" identity== 'police'">
             <a href="http://localhost:8090/"  target="_blank" class="btn-lg">
                 <span class="glyphicon glyphicon-user" aria-hidden="true" style="color:#121cea"></span>
             </a>
@@ -79,6 +79,7 @@ export default {
             console.info(infor)
             this.identity = infor.identity;
             window.localStorage.setItem('identity', infor.identity);
+            window.localStorage.setItem('code', infor.code)
             if (infor.identity == 'prison') {
                 window.location.href = "#/working/detail/" + infor.code;
             } else if (infor.identity == 'police') {

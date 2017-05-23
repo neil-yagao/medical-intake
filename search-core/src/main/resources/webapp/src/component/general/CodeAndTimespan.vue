@@ -9,6 +9,19 @@
         <div class="col-md-2" >
             <date-picker :date="endDate" :option="option" :limit="endLimit"></date-picker>
         </div>
+        <div class="col-md-3" v-if="showTime">
+            <div class="input-group">
+                <input type="text" class="form-control" v-model="time" placeholder="服药时间">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">服药时间
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li v-for="value in qualifiedTime" @click="time = value"><a>{{value}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class="col-md-1" v-show="this.startDate.time || this.code">
             <button class="btn btn-default" @click="passingCondition()"><span class="glyphicon glyphicon-search"></span></button>
         </div>
@@ -18,7 +31,7 @@
 <script>
 import myDatepicker from 'vue-datepicker';
 import moment from "moment"
-
+import Vue from 'vue'
 export default {
     name: 'code-and-timespan',
     data() {
@@ -54,7 +67,10 @@ export default {
                 },
                 overlayOpacity: 0.5, // 0.5 as default
                 dismissible: true // as true as default
-            }
+
+            },
+            qualifiedTime: Vue.qualifiedTime(),
+            time: ''
         }
     },
     methods: {
@@ -72,9 +88,15 @@ export default {
             var timespan = start + ":" + end
             this.$emit('condition-query', {
                 'code': this.code ? this.code : 'all',
-                'timespan': timespan
+                'timespan': timespan,
+                'time':this.time? this.time: "all"
             });
         }
+    },
+    props:{
+    	'showTime':{
+    		default:true
+    	}
     },
     components: {
         'date-picker': myDatepicker

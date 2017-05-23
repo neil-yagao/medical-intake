@@ -56,7 +56,7 @@ export default {
 
         },
         checkRecord: function(m) {
-            console.info(m)
+        	m.matching = !m.matching
         },
         saveCheckedRecord:function(){
         	this.$http.post('intake/miss', JSON.stringify(this.records))

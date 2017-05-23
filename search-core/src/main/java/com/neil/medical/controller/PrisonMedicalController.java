@@ -3,6 +3,7 @@ package com.neil.medical.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.neil.medical.pojo.PrisonMedicalInfo;
 import com.neil.medical.service.PrisonMedical;
+import com.neil.medical.service.PrisonPrescription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +19,14 @@ public class PrisonMedicalController {
     @Autowired
     private PrisonMedical prisonMedical;
 
+    @Autowired
+    private PrisonPrescription prescription;
 
-    @RequestMapping(value = "inmate/medical", method = RequestMethod.POST)
+
+    @RequestMapping(value = "inmate/medical/{changeBy}", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject inmateMedicalInfo(@RequestBody List<PrisonMedicalInfo> prisonMedical) {
-        this.prisonMedical.insertInmateMedicalInfo(prisonMedical);
+    public JSONObject inmateMedicalInfo(@RequestBody List<PrisonMedicalInfo> prisonMedical, @PathVariable String changeBy) {
+        this.prescription.recordChange(prisonMedical, changeBy);
         return new JSONObject().fluentPut("success", true);
     }
 

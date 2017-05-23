@@ -64,7 +64,7 @@ export default {
     watch: {
         condition: function() {
             var timespan = this.condition.timespan;
-            this.$http.get('intake/' + this.condition.code + "/" + timespan).then((res) => {
+            this.$http.get('intake/' + this.condition.code + "/" + timespan + "/" + this.condition.time).then((res) => {
                 this.candidates = []
                 _.forEach(res.body, (r) => {
                     this.candidates.push({

@@ -16,9 +16,12 @@ var router = {
             path: 'outbound',
             component: MedicalOutbound
         }
+        /*,{
+                   path: 'prescription',
+                   component: PrescriptionRecord
+               }*/
 
 
     ]
 }
-
 export default router

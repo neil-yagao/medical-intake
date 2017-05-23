@@ -47,7 +47,10 @@ export default {
             this.mediaRecorder.stop();
             this.recording = false;
             this.savable = true;
-            var blob = new Blob(this.blobs, {
+            this.saveRecord()
+        },
+        saveRecord(){
+        	var blob = new Blob(this.blobs, {
                 type: 'video/webm'
             });
             var url = window.URL.createObjectURL(blob);
@@ -61,6 +64,7 @@ export default {
 			    document.body.removeChild(a);
 			    window.URL.revokeObjectURL(url);
 			  }, 100);
+            this.blobs = [];
         },
         onMediaSuccess:function (stream) {
             var video = document.getElementById('recording');

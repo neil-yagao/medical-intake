@@ -45,10 +45,13 @@ public class PrisonIntakeRecord {
         medicalInventory.insertOrUpdateMedicalInfo(usedMedical, code);
     }
 
-    public List<JSONObject> getPrisonIntakeRecord(String code, String timespan) {
+    public List<JSONObject> getPrisonIntakeRecord(String code, String timespan, String time) {
         DBObject queryCondition = new BasicDBObject();
         if (!code.equalsIgnoreCase("all")) {
             queryCondition.put("code", code);
+        }
+        if(!time.equalsIgnoreCase("all")){
+            queryCondition.put("medicals.time", time);
         }
         JSONObject timespanRange = TimeUtil.parseTimespan(timespan);
         queryCondition.put("timestamp", new BasicDBObject(timespanRange));
