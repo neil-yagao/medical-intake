@@ -36,6 +36,11 @@ public class PrisonMedicalController {
         return prisonMedical.getPrisonMedicalInfo(code);
     }
 
+    @RequestMapping(value = "prescription/history/{code}/{timespan}")
+    @ResponseBody
+    public List<JSONObject> prescriptionHistory(@PathVariable String code, @PathVariable String timespan){
+        return prescription.getHistory(code, timespan);
+    }
 
 
 }

@@ -87,7 +87,7 @@ export default {
             }
             var timespan = start + ":" + end
             this.$emit('condition-query', {
-                'code': this.code ? this.code : 'all',
+                'code': this.code.trim() ? this.code.trim() : 'all',
                 'timespan': timespan,
                 'time':this.time? this.time: "all"
             });

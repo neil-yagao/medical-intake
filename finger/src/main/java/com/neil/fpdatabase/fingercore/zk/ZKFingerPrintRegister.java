@@ -44,9 +44,10 @@ public class ZKFingerPrintRegister implements FingerPrintRegister {
         return index;
     }
 
-    public void setIdentity(String code, String identity) {
+    public void setIdentity(String code, String identity, String headPic) {
         this.currentRegistering.setIdentity(identity);
         this.currentRegistering.setPrisonCode(code);
+        this.currentRegistering.setHeadPic(headPic);
     }
 
 

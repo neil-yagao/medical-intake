@@ -44,7 +44,7 @@ public class FingerPrintRegisterHandler extends TextWebSocketHandler {
         JSONObject identity = JSON.parseObject(identityInfoJSON);
         if (identity.getString("op").equals("reg")) {
             register.setIdentity(identity.getString("code"),
-                    identity.getString("identity"));
+                    identity.getString("identity"), identity.getString("head"));
             renameFingerPrintPics((List<String>) identity.get("imgs"),
                     identity.getString("identity"),
                     identity.getString("code"));

@@ -12,7 +12,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script charset="utf-8">
 
 import _ from 'lodash'
 export default {

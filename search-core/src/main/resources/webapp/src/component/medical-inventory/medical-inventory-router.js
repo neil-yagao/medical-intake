@@ -1,7 +1,8 @@
-import MedicalInventoryMain from './MedicalInventoryMain.vue'
-import MasterDataMedical from './MasterDataMedical.vue'
-import MedicalInbound from './MedicalInbound.vue'
-import MedicalOutbound from './MedicalOutbound.vue'
+import MedicalInventoryMain from './MedicalInventoryMain.vue';
+import MasterDataMedical from './MasterDataMedical.vue';
+import MedicalInbound from './MedicalInbound.vue';
+import MedicalOutbound from './MedicalOutbound.vue';
+
 
 var router = {
     path: 'medical-inventory',
@@ -16,10 +17,6 @@ var router = {
             path: 'outbound',
             component: MedicalOutbound
         }
-        /*,{
-                   path: 'prescription',
-                   component: PrescriptionRecord
-               }*/
 
 
     ]

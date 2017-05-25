@@ -36,11 +36,13 @@ export default {
             }).then( (res) => {
                 var identity = res.body.identity
                 this.redirectBasedOnIdentity(identity)
+                window.localStorage.setItem('code', res.body.code)
             })
             
         },
         redirectBasedOnIdentity:function(identity){
             window.localStorage.setItem('identity', identity)
+
                 if(identity == 'police'){
                     window.location.href = "#/working/by-number"
                 }else {

@@ -19,6 +19,6 @@ public class LoginController {
         LOGGER.info("request body:" + login);
         if (!login.getString("key").equals("13951928868"))
             return new JSONObject().fluentPut("identity", "prison");
-        return new JSONObject().fluentPut("identity", "police");
+        return new JSONObject().fluentPut("identity", "police").fluentPut("code","developer");
     }
 }
