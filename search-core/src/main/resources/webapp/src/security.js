@@ -1,6 +1,6 @@
 function securityModule() {
     var identityUrlAccessMapping = {
-        'prison': [/.*working\/detail\/.*/, /.*recording.*/],
+        'prison': [/.*working\/detail.*/, /.*recording.*/],
         'police': [/.*/],
         'medical': [/.*working\/.*/, /.*recording.*/]
     }

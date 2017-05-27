@@ -66,7 +66,7 @@ function showVideoRecordWindow() {
     if (!vedioRecording) {
         vedioRecording = true;
         console.info("url:" + window.location.href)
-        recordingWindow = window.open('http://localhost:8080/#/recording', '_blank',
+        recordingWindow = window.open('http://localhost:18080/#/recording', '_blank',
             'location=yes,height=400,width=500,scrollbars=yes,status=yes,left=' + x + ',top=' + y);
         var timer = setInterval(
             () => {

@@ -30,7 +30,6 @@ export default {
     mounted: function() {
         this.$http.get("inmate/medical/all").then((res) => {
             var self = this;
-
             _.each(res.body, function(medicalInfo) {
                 self.rows.push({
                     'code': medicalInfo.code,
@@ -38,8 +37,9 @@ export default {
                     'img': 'img/head/' + medicalInfo.code + ".png",
                     'style': '',
                     'time':medicalInfo.time
-                })
+                });
             });
+
         })
     },
     props:['inmates'],
@@ -57,7 +57,8 @@ export default {
                     return val.time == this.inmates.time
                 })
             }
-            return _.uniqBy(resultList, 'code').slice(0, 10)
+            var result = _.uniqBy(resultList, 'code')
+            return _.sortBy(result, 'code');
         }
     }
 }

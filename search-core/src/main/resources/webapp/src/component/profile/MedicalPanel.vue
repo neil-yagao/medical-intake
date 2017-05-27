@@ -25,6 +25,7 @@
 <script>
 import _ from "lodash";
 import moment from 'moment';
+import Vue from 'vue';
 export default {
 	name:'medical-panel',
 	props:['data','edit'],
@@ -37,7 +38,9 @@ export default {
 			this.$emit('delete-medical', {name: medical.medical, time: this.data.time})
 		},
 		matchingTime(time){
-			var hour = moment().hour()
+			var hour = moment().hour();
+			console.info(hour)
+			return Vue.matchingPredefineTime(hour).indexOf(time) >= 0;
 		}
 	}
 

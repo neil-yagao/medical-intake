@@ -17,7 +17,9 @@
 </template>
 <script>
 import MediaStreamRecorder from 'msr' 
-import _ from "lodash"
+import _ from "lodash";
+var autoClose = "";
+var saveEveryMinutes = "";
 export default {
 	name:'video-recorder',
 	data() {
@@ -41,13 +43,14 @@ export default {
         	this.captureUserMedia(this.mediaConstraints, this.onMediaSuccess, this.onMediaError)
         	this.recording = true;
         	this.savable = false;
-        	console.info("starting")
         },
         stop: function() {
             this.mediaRecorder.stop();
             this.recording = false;
             this.savable = true;
             this.saveRecord()
+			clearInterval(autoClose)
+			clearInterval(saveEveryMinutes)
         },
         saveRecord(){
         	var blob = new Blob(this.blobs, {
@@ -95,9 +98,12 @@ export default {
 		if(!this.recording){
 			this.start()
 		}
-		var interval = setInterval(()=>{
+		saveEveryMinutes = setInterval(()=>{
+			this.saveRecord()
+		}, 60000);
+		//auto close after 10 min
+		autoClose = setInterval(()=>{
 			var lastUsed = window.localStorage.getItem('last-usage');
-			console.info(lastUsed);
 			if(lastUsed){
 				var now = Math.floor(Date.now() / 1000);
 				var duration = now - lastUsed;
@@ -106,13 +112,15 @@ export default {
 						//automatic download
 						this.stop();
 						window.localStorage.setItem('last-usage','')
-						clearInterval(interval)
+
 					}
 				}else{
 					this.start()
 				}
 			}
 		}, 1000)
+
+
 	}
 }
 

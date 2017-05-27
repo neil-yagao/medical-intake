@@ -7,6 +7,7 @@ if not exist "%BASE_DIR%\img" mkdir "%BASE_DIR%\img"
 if not exist "%BASE_DIR%\img\head" mkdir "%BASE_DIR%\img\head"
 if not exist "%BASE_DIR%\img\prison" mkdir "%BASE_DIR%\img\prison"
 if not exist "%BASE_DIR%\img\police" mkdir "%BASE_DIR%\img\police"
+if not exist "%BASE_DIR%\img\medical" mkdir "%BASE_DIR%\img\medical"
 if not exist "%BASE_DIR%\video" mkdir "%BASE_DIR%\video"
 
 REM * set up directory structure end

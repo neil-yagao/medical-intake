@@ -69,9 +69,6 @@ var height = 0; // This will be computed based on the input stream
 
 var streaming = false;
 
-// The various HTML elements we need to configure or control. These
-// will be set by the startup() function.
-
 var video = null;
 var canvas = null;
 var photo = null;

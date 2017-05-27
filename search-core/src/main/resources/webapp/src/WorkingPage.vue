@@ -1,4 +1,4 @@
-<template>
+`<template>
 <div>
     <ul class="nav nav-tabs" v-if=" identity== 'police' || identity == 'medical'">
         <li role="presentation" :class="this.$route.path.indexOf('by-number') >= 0?'active':''" title="编号搜索">

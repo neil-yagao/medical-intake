@@ -31,6 +31,7 @@ public class MongoFingerPrintPersistent implements PersistentFingerPrint {
         fingerPrint.put("generated", cachedFingerPrint.getCombinedTemplate());
         fingerPrint.put("code", cachedFingerPrint.getIdentityCode());
         fingerPrint.put("identity", cachedFingerPrint.getIdentity());
+        fingerPrint.put("headPic", cachedFingerPrint.getHeadPic());
         mongoTemplate.getCollection(COLLECTION_NAME).save(fingerPrint);
     }
 
