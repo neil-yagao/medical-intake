@@ -12,7 +12,7 @@
 		</div>
 	</div>
 </template>
-<script>
+<script charset="utf-8">
 
 import _ from 'lodash'
 export default {
@@ -30,7 +30,6 @@ export default {
     mounted: function() {
         this.$http.get("inmate/medical/all").then((res) => {
             var self = this;
-
             _.each(res.body, function(medicalInfo) {
                 self.rows.push({
                     'code': medicalInfo.code,
@@ -38,8 +37,9 @@ export default {
                     'img': 'img/head/' + medicalInfo.code + ".png",
                     'style': '',
                     'time':medicalInfo.time
-                })
+                });
             });
+
         })
     },
     props:['inmates'],
@@ -51,23 +51,16 @@ export default {
                     return val.code.indexOf(this.inmates.code) > 0
                 })
             }
-            if (this.inmates.time) {
-            	console.info(this.rows)
-                resultList = _.filter(this.rows, (val) => {
-                    return val.time == this.inmates.time
-                })
-            }
-            return _.uniqBy(resultList, 'code').slice(0, 10)
+
+            var result = _.uniqBy(resultList, 'code')
+            return _.sortBy(result, 'code');
         }
     }
 }
 </script>
 <style>
 .thumbnail-transparent {
-	 background: none;
+	 background: rgba(255, 255, 252, 0.6)!important;
 }
 
-.panel-transparent .thumbnail{
-	background: rgba(122, 130, 136, 0.2)!important;
-}
 </style>

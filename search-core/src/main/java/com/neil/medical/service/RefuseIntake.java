@@ -21,7 +21,7 @@ public class RefuseIntake {
     private MongoTemplate template;
 
     @Autowired
-    private WrappedMongoTemplate<JSONObject> wrappedMongoTemplate;
+    private WrappedMongoTemplate wrappedMongoTemplate;
 
     public List<JSONObject> getAllRefusingRecord() {
         return wrappedMongoTemplate.query(MISSING_INTAKE_COLLECTION, new JSONObject());

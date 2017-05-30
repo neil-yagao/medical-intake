@@ -20,6 +20,8 @@ public class CachedFingerPrint {
 
     private byte[] combinedTemplate;
 
+    private String headPic = "";
+
     public Boolean isReady() {
         return scannedBytes.size() >= 3;
     }
@@ -85,4 +87,11 @@ public class CachedFingerPrint {
     }
 
 
+    public String getHeadPic() {
+        return headPic;
+    }
+
+    public void setHeadPic(String headPic) {
+        this.headPic = headPic;
+    }
 }

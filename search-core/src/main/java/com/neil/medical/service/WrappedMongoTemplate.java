@@ -15,13 +15,13 @@ import java.util.List;
  * Created by nhu on 5/2/2017.
  */
 @Component
-public class WrappedMongoTemplate<T> {
+public class WrappedMongoTemplate {
 
     @Autowired
     private MongoTemplate template;
 
 
-    public List<JSONObject> getListFromCursor(DBCursor cursor) {
+    public static List<JSONObject> getListFromCursor(DBCursor cursor) {
         List<JSONObject> resultList = new ArrayList<>();
         while (cursor.hasNext()) {
             resultList.add(new JSONObject(cursor.next().toMap()));

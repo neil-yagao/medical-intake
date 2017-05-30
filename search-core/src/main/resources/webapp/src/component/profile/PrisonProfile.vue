@@ -18,8 +18,8 @@
 			</div>
 			<div class="col-md-8">
 				<div class="row" style="max-height: 500px;overflow-y: scroll;">
-					<div class="col-md-4" v-for=" medicalInfo in medicalList" >
-						<medical-panel :data="medicalInfo" :edit="false"></medical-panel>
+					<div class="col-md-4" v-for=" medicalInfo in medicalList">
+						<medical-panel :data="medicalInfo" :edit="false" @confirm-intake="confirmIntake()"></medical-panel>
 					</div>
 				</div>
 			</div>
@@ -27,10 +27,10 @@
 	</div>
 </template>
 <script>
-
 import MedicalPanel from './MedicalPanel.vue'
 import router from '../../router.js'
 import moment from "moment"
+import Vue from 'vue'
 var states = ""
 export default {
     name: 'personal-profile',
@@ -40,7 +40,8 @@ export default {
             medicalList: [],
             currentCode: '',
             identity: '',
-            websocket: ''
+            websocket: '',
+            tempObject:{}
         }
     },
     methods: {
@@ -56,28 +57,27 @@ export default {
             this.identity = window.localStorage.getItem('identity');
             this.$http.get('inmate/medical/' + id).then((res) => {
                 this.img = 'img/head/' + id + ".png"
-                var tempObject = _.groupBy(res.body, 'time')
-                console.info(tempObject)
+                this.tempObject = _.groupBy(res.body, 'time')
                 this.medicalList = []
-                for (var time in tempObject) {
+                for (var time in  this.tempObject) {
                     this.medicalList.push({
                         'time': time,
-                        'medicalList': tempObject[time]
+                        'medicalList':  this.tempObject[time]
                     })
                 }
                 this.medicalList = _.sortBy(this.medicalList, function(m){
-					return window.qualifiedTime.indexOf(m.time)
+					return Vue.qualifiedTime().indexOf(m.time)
 				})
-                if (this.identity == 'prison') {
-                    var matching = this.findMatchingMedicalList(tempObject);
-                    console.info(matching)
-                    this.$http.post('inmate/intake/' + id, JSON.stringify(_.compact(matching))).then((res) => {
-                        console.info("confirm:" + id)
-                    })
-                }
-
+               
             })
-
+            window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
+        },
+        confirmIntake(){
+        	var id = this.$route.params.id
+            var matching = this.findMatchingMedicalList(this.tempObject);
+            this.$http.post('inmate/intake/' + id, JSON.stringify(_.compact(matching))).then((res) => {
+                console.info("confirm:" + id)
+            })
         },
         findMatchingMedicalList(object) {
             var time = moment().hour()
@@ -99,7 +99,7 @@ export default {
     created: function() {
         this.identity = window.localStorage.getItem('identity');
         console.info(this.currentCode)
-        this.queryCurrentProfile(this.currentCode)
+        this.queryCurrentProfile()
     },
     watch: {
         '$route': 'queryCurrentProfile'

@@ -1,5 +1,6 @@
 package com.neil.medical.service;
 
+import com.neil.medical.util.TimeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +51,6 @@ public class VideoRename {
         FileReadingMessageSource source = new FileReadingMessageSource();
         source.setDirectory(new File(directoryToWatch + "/img/head"));
         CompositeFileListFilter compositeFileListFilter = new CompositeFileListFilter();
-        compositeFileListFilter.addFilter(new AcceptOnceFileListFilter());
         compositeFileListFilter.addFilter(new SimplePatternFileListFilter("*.webm"));
         source.setFilter(compositeFileListFilter);
         return source;
@@ -77,8 +77,7 @@ public class VideoRename {
         handler.setFileNameGenerator(new FileNameGenerator() {
             @Override
             public String generateFileName(Message<?> message) {
-                LocalDateTime datetime = LocalDateTime.now();
-                return datetime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd(HH-mm-ss)")) + ".webm";
+                return TimeUtil.getCurrentDateFormat("yyyy-MM-dd(HH-mm-ss)") + ".webm";
             }
         });
         return handler;

@@ -9,7 +9,7 @@ public interface FingerPrintRegister {
 
     int registerFingerPrint(byte[] fingerPrint) throws IOException;
 
-    void setIdentity(String code, String identity);
+    void setIdentity(String code, String identity, String headPic);
 
     void resetRegisterInfo();
 

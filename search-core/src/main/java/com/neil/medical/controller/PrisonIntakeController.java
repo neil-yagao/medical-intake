@@ -37,10 +37,10 @@ public class PrisonIntakeController {
         return refuseIntake.getAllRefusingRecord();
     }
 
-    @RequestMapping(value = "intake/{code}/{timespan}")
+    @RequestMapping(value = "intake/{code}/{timespan}/{time}")
     @ResponseBody
-    public List<JSONObject> findIntakeRecording(@PathVariable String code, @PathVariable String timespan) {
-        return intakeRecord.getPrisonIntakeRecord(code, timespan);
+    public List<JSONObject> findIntakeRecording(@PathVariable String code, @PathVariable String timespan, @PathVariable String time) {
+        return intakeRecord.getPrisonIntakeRecord(code, timespan, time);
     }
 
 

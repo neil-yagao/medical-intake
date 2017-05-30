@@ -1,6 +1,6 @@
 <template>
     <div class="text-center">
-	  	<h3>上传需要更新的文件</h3>
+	  	<h3>{{title}}</h3>
         <div class="row">
             <div class="col-md-9">
                 <input id="fileupload" name="myfile" type="file" @change="onFileChange"/>
@@ -19,7 +19,9 @@ import X from "xlsx"
 export default {
     name: 'upload-file',
     data() {
-        return {}
+        return {
+        	title:''
+        }
     },
     methods: {
         onFileChange(e) {
@@ -86,6 +88,14 @@ export default {
 				})
 			}
 		}
+    },
+    mounted:function(){
+    	var id = this.$route.params.title;
+    	if(id == "prescription"){
+    		this.title = "上传处方信息"
+    	}else if(id == "medical"){
+    		this.title = "入库多个药物信息"
+    	}
     }
 
 }

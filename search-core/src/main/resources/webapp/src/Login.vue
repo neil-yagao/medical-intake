@@ -36,16 +36,18 @@ export default {
             }).then( (res) => {
                 var identity = res.body.identity
                 this.redirectBasedOnIdentity(identity)
+                window.localStorage.setItem('code', res.body.code)
             })
             
         },
         redirectBasedOnIdentity:function(identity){
             window.localStorage.setItem('identity', identity)
-                if(identity == 'police'){
-                    window.location.href = "#/working/by-number"
-                }else {
-                    window.location.href = "#/"
-                }
+
+            if(identity != 'prison'){
+                window.location.href = "#/working/by-time"
+            }else {
+                window.location.href = "#/working/detail/" + window.localStorage.getItem('code')
+            }
         }
     },
     computed:{
@@ -64,11 +66,8 @@ export default {
     		console.info(msg)
     		var infor = JSON.parse(msg.data)
     		window.localStorage.setItem('identity', infor.identity)
-    		if(infor.identity == 'prison'){
-    			window.location.href = "#/working/detail/" + infor.code;
-    		}else if(infor.identity == 'police'){
-				window.location.href = "#/working/by-number"
-    		}
+    		window.localStorage.setItem('code', infor.code)
+    		this.redirectBasedOnIdentity(infor.identity)
     	}
     }
 }

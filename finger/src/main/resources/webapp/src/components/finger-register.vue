@@ -25,9 +25,12 @@
                     <input type="radio" v-model="identity" value="prison">注册为服刑人员
                 </div>
                 <div class="col-md-2">
+                    <input type="radio" v-model="identity" value="medical">注册为药物管理
+                </div>
+                <div class="col-md-2">
                     <input type="radio" v-model="identity" value="police">注册为管教人员
                 </div>
-                 <div class="col-md-offset-2 col-md-3" style="top: -60px; position: relative">
+                 <div class="col-md-3" style="top: -60px; position: relative">
                     <video id="video"></video>
                     <button id="startbutton" @click="takepicture()" :disabled="code.length == 0">拍摄</button>
                 </div>
@@ -65,9 +68,6 @@ var height = 0; // This will be computed based on the input stream
 // video from the camera. Obviously, we start at false.
 
 var streaming = false;
-
-// The various HTML elements we need to configure or control. These
-// will be set by the startup() function.
 
 var video = null;
 var canvas = null;
@@ -159,11 +159,16 @@ export default {
     },
     methods: {
         register: function() {
+            var imgCode = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
             var identityInfo = {
                 'code': this.code,
                 'identity': this.identity,
                 'op': 'reg',
-                'imgs': this.imgs
+                'imgs': this.imgs,
+                'head': imgCode + ".png"
             }
             console.info("sending:" + identityInfo)
             console.info(this.websocket.readyState)
@@ -172,7 +177,7 @@ export default {
                 this.regs.push(identityInfo)
                 var download = document.createElement("a");
                 download.href = this.headPic;
-                download.download = this.code + ".png";
+                download.download = imgCode+ ".png";
                 download.click()
             }
             this.reset()

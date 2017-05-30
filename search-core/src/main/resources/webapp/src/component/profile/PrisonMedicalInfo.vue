@@ -61,9 +61,10 @@
 </div>
 </template>
 <script type="text/javascript">
-import MedicalPanel from './MedicalPanel.vue'
-import MedicalSelector from './MedicalSelectionModal.vue'
-import _ from "lodash"
+import MedicalPanel from './MedicalPanel.vue';
+import MedicalSelector from './MedicalSelectionModal.vue';
+import _ from "lodash";
+import Vue from 'vue';
 export default {
 	name :'add-prison-medical',
 	data(){
@@ -90,7 +91,7 @@ export default {
 			showAlert:false,
 			alertClass:  "alert-danger",
 			alertMsg :'',
-			qualifiedTime: window.qualifiedTime
+			qualifiedTime: Vue.qualifiedTime()
 		}
 	},
 	methods:{
@@ -140,9 +141,7 @@ export default {
 				this.medicalList.push(tempMedicalInfo)
 			}
 			this.medicalList = _.sortBy(this.medicalList, function(m){
-				console.info("current index" + window.qualifiedTime.indexOf(m.time))
-
-				return window.qualifiedTime.indexOf(m.time)
+				return self.qualifiedTime.indexOf(m.time)
 			})
 		},
 		saveMedicalInfo: function(){
@@ -170,7 +169,8 @@ export default {
 					});
 				})
 			console.info(flatternPrisonMedicalList)
-			this.$http.post('inmate/medical', JSON.stringify(flatternPrisonMedicalList)).then((res) =>{
+			var currentUser = window.localStorage.getItem("code");
+			this.$http.post('inmate/medical/' + currentUser, JSON.stringify(flatternPrisonMedicalList)).then((res) =>{
 				if(res.body.success){
 					this.showAlert = true
 					this.alertMsg = "添加成功"

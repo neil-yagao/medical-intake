@@ -1,53 +1,46 @@
 import Login from './Login.vue'
 import WorkingSpace from './WorkingPage.vue'
+import UploadFile from './component/general/UploadFile.vue'
 import ByNumberSearch from './component/nosearch/ByNumberSearch.vue'
 import ByTimeSearch from './component/timesearch/ByTimeSearch.vue'
 import VideoRecorder from './component/profile/VideoRecorder.vue'
 import PrisonProfile from './component/profile/PrisonProfile.vue'
 import PrisonMedicalInfo from './component/profile/PrisonMedicalInfo.vue'
-import MasterDataMain from './component/master-data/MasterDataMain.vue'
-import MasterDataMedical from './component/master-data/MasterDataMedical.vue'
-import MasterDataInmate from './component/master-data/MasterDataInmate.vue'
-import UploadFile from './component/master-data/UploadFile.vue'
-import RuntimeDataIntake from './component/master-data/IntakeRecords.vue'
+import MasterDataRouter from './component/master-data/master-data-router.js'
+import MedicalInventoryRouter from './component/medical-inventory/medical-inventory-router.js'
+import PrescriptionRecord from './component/master-data/PrescriptionRecord.vue'
 import VueRouter from 'vue-router'
+import Security from './security.js'
 
 const routes = [{
     path: "/working",
     component: WorkingSpace,
     children: [{
-        path: "by-number",
-        component: ByNumberSearch
-    }, {
-        path: "by-time",
-        component: ByTimeSearch
-    }, {
-        path: "data-edit",
-        component: MasterDataMain,
-        children: [{
-            path: "",
+            path: "prescription/by-number",
+            component: ByNumberSearch
+        }, {
+            path: "by-time",
+            component: ByTimeSearch
+        }, {
+            path: 'upload/:title',
             component: UploadFile
-        }, {
-            path: "medical",
-            component: MasterDataMedical
-        }, {
-            path: "inmate",
-            component: MasterDataInmate
-        }, {
-            path: "intake",
-            component: RuntimeDataIntake
-        }]
-    }, {
-        path: 'detail/:id',
-        component: PrisonProfile
+        },
+        MasterDataRouter,
+        MedicalInventoryRouter, {
+            path: 'detail/:id',
+            component: PrisonProfile
 
-    }, {
-        path: 'add',
-        component: PrisonMedicalInfo
-    }, {
-        path: 'edit/:id',
-        component: PrisonMedicalInfo
-    }]
+        }, {
+            path: 'add',
+            component: PrisonMedicalInfo
+        }, {
+            path: 'edit/:id',
+            component: PrisonMedicalInfo
+        }, {
+            path: 'prescription/records',
+            component: PrescriptionRecord
+        }
+    ]
 
 }, {
     path: '/',
@@ -62,38 +55,15 @@ const router = new VueRouter({
 })
 var debounceToLogin = '';
 var vedioRecording = false
-
+var recordingWindow = '';
 router.beforeEach((to, from, next) => {
-    var identity = window.localStorage.getItem('identity');
-    if (!identity) {
-        next(false)
-    }
-    /*var self = this;
-    if (debounceToLogin) {
-        debounceToLogin.cancel()
-    }
-    debounceToLogin = _.debounce(function() {
-        console.info("calling debounce!")
-        window.localStorage.setItem('identity', '');
-        vedioRecording = false;
-        window.location.href = "#/"
-    }, 10 * 1000);
-    if()
-    debounceToLogin()*/
-    if (identity != 'police') {
-        if (to.fullPath.indexOf('working/detail') > 0 //to detail
-            ||
-            to.fullPath == "/" ||
-            to.fullPath.indexOf('recording') > 0) { //to login
-            if (to.fullPath.indexOf('working/detail') > 0) {
-                showVideoRecordWindow()
-            }
-            next()
-        } else {
-            next(false)
+    if (Security.isAllowTransfer(to.fullPath)) {
+        if (to.fullPath.indexOf('working/detail') > 0) {
+            showVideoRecordWindow()
         }
+        next()
     } else {
-        next();
+        next(false)
     }
 
 })
@@ -101,16 +71,17 @@ router.beforeEach((to, from, next) => {
 function showVideoRecordWindow() {
     var x = screen.width / 2 - 700 / 2;
     var y = screen.height / 2 - 450 / 2;
-    console.info("start recording!")
     if (!vedioRecording) {
         vedioRecording = true;
         console.info("url:" + window.location.href)
-        var child = window.open('http://localhost:8080/#/recording', '_blank',
+        recordingWindow = window.open('http://localhost:18080/#/recording', '_blank',
             'location=yes,height=400,width=500,scrollbars=yes,status=yes,left=' + x + ',top=' + y);
         var timer = setInterval(
             () => {
-                if (child && child.closed) {
+                if (recordingWindow && recordingWindow.closed) {
                     vedioRecording = false;
+                    console.info("vedio recording is closed!")
+                    clearInterval(timer)
                 }
             }, 100)
     }

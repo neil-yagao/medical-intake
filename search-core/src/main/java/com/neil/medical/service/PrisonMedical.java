@@ -19,7 +19,7 @@ public class PrisonMedical {
     public static final String INMATE_REQUIRED_MEDICAL_COLLECTION = "inmate-medical";
 
     @Autowired
-    private WrappedMongoTemplate<PrisonMedicalInfo> wrappedTemplate;
+    private WrappedMongoTemplate wrappedTemplate;
 
     @Autowired
     private MongoTemplate template;

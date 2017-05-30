@@ -1,33 +1,29 @@
 <template>
 	<div>
+		<h3>{{title}}</h3>
 		<div class="row">
-			<div class="col-md-3"> 
+			<!-- <div class="col-md-3"> 
 				<ul class="list-group">
-					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/medical') >= 0?'list-group-item-success':''"> <a href="#/working/data-edit/medical" >药物管理</a></li>
 					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/inmate') >= 0?'list-group-item-success':''"> <a href="#/working/data-edit/inmate" >服刑人员未服药记录</a></li>
 					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/intake') >= 0?'list-group-item-success':''"><a href="#/working/data-edit/intake">服刑人员服药记录</a></li>
+					<li class="list-group-item" role="button" :class="this.$route.path.indexOf('data-edit/prescription') >= 0?'list-group-item-success':''"><a href="#/working/data-edit/prescription">服刑人员处方修改记录</a></li>
 					<hr>
 					<li class="list-group-item list-group-item-warning" role="button" @click="downloadMedicalInfo()">服刑人员服药情况下载</li>
 				</ul>
-			</div>
-			<div class="col-md-9">
-				<router-view></router-view>
-			</div>
+			</div> -->
+			<router-view></router-view>
 		</div>
 	</div>
 </template>
 <script>
 var FileSaver = require('file-saver');
 import XLSX from "xlsx"
-function Workbook() {
-	if(!(this instanceof Workbook)) return new Workbook();
-	this.SheetNames = [];
-	this.Sheets = {};
-}
+
 export default {
     name: 'master-data',
     data() {
-        return {}
+        return {
+        }
     },
     methods: {
         downloadMedicalInfo() {
@@ -59,7 +55,18 @@ export default {
         	})
         	
         }
-    }
+    },
+    computed:{
+	    	title:function(){
+	    	if(this.$route.path.indexOf('inmate') > 0){
+	    		return '未服药记录查询'
+	    	}else if(this.$route.path.indexOf('intake') > 0){
+	    		return '服药记录查询'
+	    	}else if(this.$route.path.indexOf('prescription') > 0){
+	    		return '处方修改查询'
+	    	}
+	    }
+	}	
 }
 </script>
 <style>

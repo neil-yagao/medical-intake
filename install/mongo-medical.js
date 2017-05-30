@@ -57,5 +57,16 @@ if (collections.indexOf("missing_intake") >= 0) {
         "unique": true
     })
 }
-print("current collections:")
-printjson(db.getCollectionNames());
+
+if (collections.indexOf("medicals-records") >= 0) {
+    print("found medicals-records")
+} else {
+    db.createCollection("medicals-records");
+    missing_intake = db.getCollection("medicals-records");
+    missing_intake.createIndex({
+        "medical": 1,
+        "timestamp": 1
+    }, {
+        "unique": true
+    })
+}
