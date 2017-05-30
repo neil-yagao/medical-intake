@@ -44,7 +44,7 @@ export default {
             window.localStorage.setItem('identity', identity)
 
             if(identity != 'prison'){
-                window.location.href = "#/working/by-number"
+                window.location.href = "#/working/by-time"
             }else {
                 window.location.href = "#/working/detail/" + window.localStorage.getItem('code')
             }

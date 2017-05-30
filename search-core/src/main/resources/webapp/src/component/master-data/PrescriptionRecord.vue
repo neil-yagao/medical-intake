@@ -31,8 +31,8 @@
             <h4>修改人</h4>
         </div>
     </div>
-    <div style="max-height: 500px;overflow-y: scroll">
-        <div class="row" v-for="record in records" >
+    <div style="max-height: 500px;overflow-y: scroll;">
+        <div class="row" v-for="record in records" style="width:98%" >
         	<div class="col-md-2">
              {{record.changee}}   
             </div>

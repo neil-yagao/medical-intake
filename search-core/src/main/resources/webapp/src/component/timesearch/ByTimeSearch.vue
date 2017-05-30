@@ -19,34 +19,59 @@
             <!-- /btn-group -->
         </div>
     </div>
-    <div class="row">
-        <prison-panel :inmates="{'time': time}"></prison-panel>
+    <div class="row" style="margin-top:10px ;max-height: 500px;overflow-y: scroll;">
+    	<div class="col-md-3" v-for="row in mathcingMedicals">
+        	<prescription :data="row" title="code"></prescription>
+        </div>
     </div>
 </div>
 
 </template>
 <script>
-import InmatePanel from '../profile/PrisonPanel.vue'
+import Prescription from '../master-data/Prescription.vue'
 import Vue from 'vue'
 export default {
     name: 'by-time-search',
     data() {
         return {
-        	
-            key: '',
-            time:"",
-            matchingPrison:[],
-            totals:[],
+            rows:[],
+            time:'',
             qualifiedTime:Vue.qualifiedTime()
         }
     },
     methods: {
         selectDropDown: function(value){
-			this.time = value;
+            this.time = value
 		},
     },
+    mounted: function() {
+        this.$http.get("inmate/medical/all").then((res) => {
+            var self = this;
+            _.each(res.body, function(medicalInfo) {
+                self.rows.push({
+                    'code': medicalInfo.code,
+                    'medical': medicalInfo.medical,
+                    'amount': medicalInfo.amount,
+                    'time':medicalInfo.time
+                });
+            });
+
+        })
+        console.info(this.rows)
+    },
     components: {
-        'prison-panel': InmatePanel
+        Prescription
+    },
+    computed:{
+    	mathcingMedicals :function(){
+    		var resultList = _.filter(this.rows, (val) => {
+                return val.time == this.time
+            })
+            var result = _.groupBy(resultList, 'code');
+            console.info(result)
+            return result;
+    	}
+
     }
 }
 </script>

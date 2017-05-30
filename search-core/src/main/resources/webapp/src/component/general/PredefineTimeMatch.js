@@ -4,7 +4,7 @@ function install(Vue) {
     Vue.matchingPredefineTime = function(hour) {
         if (hour <= 9) {
             return ["早餐前", "早餐后"];
-        } else if (hour <= 13) {
+        } else if (hour <= 14) {
             return ["午餐前", "午餐后"];
         } else if (hour <= 19) {
             return ["晚餐前", "晚餐后"];

@@ -1,8 +1,5 @@
 <template>
 <div>
-    <div class="page-header text-center">
-	  	<h3>按照编号搜索</h3>
-	</div>
     <div class="row">
 		<div class="col-md-8 col-md-offset-2">
 		    <div class="input-group">

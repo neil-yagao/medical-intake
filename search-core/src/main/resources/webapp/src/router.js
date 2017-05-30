@@ -1,5 +1,6 @@
 import Login from './Login.vue'
 import WorkingSpace from './WorkingPage.vue'
+import UploadFile from './component/general/UploadFile.vue'
 import ByNumberSearch from './component/nosearch/ByNumberSearch.vue'
 import ByTimeSearch from './component/timesearch/ByTimeSearch.vue'
 import VideoRecorder from './component/profile/VideoRecorder.vue'
@@ -7,6 +8,7 @@ import PrisonProfile from './component/profile/PrisonProfile.vue'
 import PrisonMedicalInfo from './component/profile/PrisonMedicalInfo.vue'
 import MasterDataRouter from './component/master-data/master-data-router.js'
 import MedicalInventoryRouter from './component/medical-inventory/medical-inventory-router.js'
+import PrescriptionRecord from './component/master-data/PrescriptionRecord.vue'
 import VueRouter from 'vue-router'
 import Security from './security.js'
 
@@ -14,11 +16,14 @@ const routes = [{
     path: "/working",
     component: WorkingSpace,
     children: [{
-            path: "by-number",
+            path: "prescription/by-number",
             component: ByNumberSearch
         }, {
             path: "by-time",
             component: ByTimeSearch
+        }, {
+            path: 'upload/:title',
+            component: UploadFile
         },
         MasterDataRouter,
         MedicalInventoryRouter, {
@@ -31,6 +36,9 @@ const routes = [{
         }, {
             path: 'edit/:id',
             component: PrisonMedicalInfo
+        }, {
+            path: 'prescription/records',
+            component: PrescriptionRecord
         }
     ]
 

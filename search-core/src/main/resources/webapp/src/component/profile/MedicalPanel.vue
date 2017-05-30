@@ -19,6 +19,9 @@
 					</tbody>
 				</table>
 			</div>
+			<div class="panel-footer text-right" v-if="matchingTime(data.time)">
+				<button class="btn btn-info" @click="confirm()" >确认服药</button>
+			</div>
 		</div>
 	</div>
 </template>
@@ -39,8 +42,10 @@ export default {
 		},
 		matchingTime(time){
 			var hour = moment().hour();
-			console.info(hour)
 			return Vue.matchingPredefineTime(hour).indexOf(time) >= 0;
+		},
+		confirm(){
+			this.$emit('confirm-intake')
 		}
 	}
 

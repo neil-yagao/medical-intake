@@ -51,12 +51,7 @@ export default {
                     return val.code.indexOf(this.inmates.code) > 0
                 })
             }
-            if (this.inmates.time) {
-            	console.info(this.rows)
-                resultList = _.filter(this.rows, (val) => {
-                    return val.time == this.inmates.time
-                })
-            }
+
             var result = _.uniqBy(resultList, 'code')
             return _.sortBy(result, 'code');
         }

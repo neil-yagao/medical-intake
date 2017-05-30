@@ -1,12 +1,50 @@
-`<template>
-<div>
-    <ul class="nav nav-tabs" v-if=" identity== 'police' || identity == 'medical'">
+<template>
+    <div>
+        <nav class="navbar navbar-default navbar-fixed-top" v-if=" identity== 'police' || identity == 'medical'">
+            <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown" :class="this.$route.path.indexOf('prescription') >= 0?'active':''">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">处方管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/working/upload/prescription">批量上传处方</a></li>
+                        <li><a href="#/working/prescription/by-number">按编号查询及修改</a></li>
+                        <li><a href="#/working/prescription/records">处方修改记录</a></li>
+                    </ul>
+                </li>
+                <li :class="this.$route.path.indexOf('by-time') >= 0?'active':''"><a href="#/working/by-time">发药辅助</a></li>
+                <li class="dropdown" :class="this.$route.path.indexOf('data-edit') >= 0?'active':''" v-if=" identity== 'police'">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">服药记录<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/working/data-edit/intake">记录查询</a></li>
+                        <li><a href="#/working/data-edit/inmate">未服药记录查询</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown" :class="this.$route.path.indexOf('medical-inventory') >= 0?'active':''">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">药物管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#/working/medical-inventory/overall">存量管理</a></li>
+                        <li><a href="#/working/medical-inventory/inbound">出库记录</a></li>
+                        <li><a href="#/working/medical-inventory/outbound">入库记录</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://localhost:8090/" target="_blank" title="注册" class="btn-lg">注册
+	        <span class="glyphicon glyphicon-user" aria-hidden="true" style="color:#121cea"></span>
+	        </a></li>
+                <li title="登出" @click="logout()" role="button">
+                    <a class="btn-lg">登出
+                        <span class="glyphicon glyphicon-off" style="color:black" aria-hidden="true" ></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!--  <ul class="nav nav-tabs" v-if=" identity== 'police' || identity == 'medical'">
         <li role="presentation" :class="this.$route.path.indexOf('by-number') >= 0?'active':''" title="编号搜索">
             <a href="#/working/by-number" class="btn-lg">
                 <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
             </a>
         </li>
-        <li role="presentation" :class="this.$route.path.indexOf('by-time') >= 0?'active':''" title="时段搜索">
+        <li role="presentation"  title="时段搜索">
             <a href="#/working/by-time" class="btn-lg">
                 <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
             </a>
@@ -16,12 +54,12 @@
                 <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
             </a>
         </li>
-        <li role="presentation" :class="this.$route.path.indexOf('medical-inventory') >= 0?'active':''" title="药物管理">
+        <li role="presentation"  title="药物管理">
             <a href="#/working/medical-inventory/overall" class="btn-lg">
                 <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
             </a>
         </li>
-        <!--  -->
+
         <li role="presentation" title="注册" style="float:right" v-if=" identity== 'police'">
             <a href="http://localhost:8090/"  target="_blank" class="btn-lg">
                 <span class="glyphicon glyphicon-user" aria-hidden="true" style="color:#121cea"></span>
@@ -32,17 +70,18 @@
                 <span class="glyphicon glyphicon-off" style="color:black" aria-hidden="true" @click="logout()"></span>
             </a>
         </li>
-    </ul>
-    <div style="margin-top:10px" id="working-area" class="container-fluid">
-    	<img src="img/background.png" id="background"/>
-        <router-view></router-view>
+    </ul> -->
+        <div style="margin-top:70px" id="working-area" class="container-fluid">
+            <img src="img/background.png" id="background" />
+            <router-view></router-view>
+        </div>
+        <footer class="text-center">
+            <span><b> 当前时间：{{currentTime}}</b></span>
+        </footer>
     </div>
-    <footer class="text-center">
-        <span><b> 当前时间：{{currentTime}}</b></span>
-    </footer>
-</div>
-
 </template>
+
+
 <script>
 export default {
     name: 'working-page',
