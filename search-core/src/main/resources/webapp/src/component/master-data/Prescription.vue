@@ -3,7 +3,8 @@
 		<template v-for="record in records">
 			<div class="row">
 				<div class="col-md-6">
-					<b>{{record.time}}</b>
+					<b v-if="title == 'time'">{{record.time}}</b>
+					<b v-if="title == 'code'">{{code}}</b>
 				</div>
 			</div>
 			<div class="row" v-for="medical in record.medicals">
@@ -19,7 +20,12 @@ import _ from 'lodash';
 import Vue from 'vue'
 export default {
 	name:'prescription',
-	props:['data'],
+	props:['data','title'],
+	data(){
+		return {
+			'code':''
+		}
+	},
 	computed:{
 		records:function(){
 			var temp = _.groupBy(this.data,'time');
@@ -30,6 +36,7 @@ export default {
 					'medicals':temp[time]
 				})
 			} 
+			this.code = this.data[0].code;
 			result = _.sortBy(result, function(m){
 				var index = Vue.qualifiedTime().indexOf(m.time)
 				return index

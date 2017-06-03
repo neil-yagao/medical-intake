@@ -58,7 +58,8 @@ var vedioRecording = false
 var recordingWindow = '';
 router.beforeEach((to, from, next) => {
     if (Security.isAllowTransfer(to.fullPath)) {
-        if (to.fullPath.indexOf('working/detail') > 0) {
+        var identity = Security.currentIdentity();
+        if (to.fullPath.indexOf('working/detail') > 0 && identity == 'prison') {
             showVideoRecordWindow()
         }
         next()
@@ -74,7 +75,7 @@ function showVideoRecordWindow() {
     if (!vedioRecording) {
         vedioRecording = true;
         console.info("url:" + window.location.href)
-        recordingWindow = window.open('http://localhost:18080/#/recording', '_blank',
+        recordingWindow = window.open('http://localhost:8080/#/recording', '_blank',
             'location=yes,height=400,width=500,scrollbars=yes,status=yes,left=' + x + ',top=' + y);
         var timer = setInterval(
             () => {

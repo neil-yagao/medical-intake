@@ -28,7 +28,7 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://localhost:8090/" target="_blank" title="注册" class="btn-lg">注册
+                <li v-if=" identity== 'police'"><a href="http://localhost:8090/" target="_blank" title="注册" class="btn-lg">注册
 	        <span class="glyphicon glyphicon-user" aria-hidden="true" style="color:#121cea"></span>
 	        </a></li>
                 <li title="登出" @click="logout()" role="button">
@@ -38,42 +38,9 @@
                 </li>
             </ul>
         </nav>
-        <!--  <ul class="nav nav-tabs" v-if=" identity== 'police' || identity == 'medical'">
-        <li role="presentation" :class="this.$route.path.indexOf('by-number') >= 0?'active':''" title="编号搜索">
-            <a href="#/working/by-number" class="btn-lg">
-                <span class="glyphicon glyphicon-barcode" aria-hidden="true"></span>
-            </a>
-        </li>
-        <li role="presentation"  title="时段搜索">
-            <a href="#/working/by-time" class="btn-lg">
-                <span class="glyphicon glyphicon-time" aria-hidden="true"></span>
-            </a>
-        </li>
-        <li role="presentation" :class="this.$route.path.indexOf('data-edit') >= 0?'active':''" title="服药记录">
-            <a href="#/working/data-edit" class="btn-lg">
-                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
-            </a>
-        </li>
-        <li role="presentation"  title="药物管理">
-            <a href="#/working/medical-inventory/overall" class="btn-lg">
-                <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
-            </a>
-        </li>
-
-        <li role="presentation" title="注册" style="float:right" v-if=" identity== 'police'">
-            <a href="http://localhost:8090/"  target="_blank" class="btn-lg">
-                <span class="glyphicon glyphicon-user" aria-hidden="true" style="color:#121cea"></span>
-            </a>
-        </li>
-        <li role="presentation" style="float:right" title="登出">
-            <a class="btn-lg">
-                <span class="glyphicon glyphicon-off" style="color:black" aria-hidden="true" @click="logout()"></span>
-            </a>
-        </li>
-    </ul> -->
         <div style="margin-top:70px" id="working-area" class="container-fluid">
             <img src="img/background.png" id="background" />
-            <router-view></router-view>
+            <router-view @confirm-intake="console.info('in working-area')"></router-view>
         </div>
         <footer class="text-center">
             <span><b> 当前时间：{{currentTime}}</b></span>
@@ -99,6 +66,7 @@ export default {
     	logout(){
     		window.location.href = "#/";
     		window.localStorage.setItem('identity', '');
+    		window.localStorage.setItem('code', '')
     	}
     },
     mounted: function() {
@@ -119,11 +87,11 @@ export default {
             this.identity = infor.identity;
             window.localStorage.setItem('identity', infor.identity);
             window.localStorage.setItem('code', infor.code)
-            if (infor.identity == 'prison') {
-                window.location.href = "#/working/detail/" + infor.code;
+            if (infor.identity =='prison' || infor.identity == 'medical') {
+            	window.location.href = "#/working/detail/" + infor.code;
             } else if (infor.identity == 'police') {
-                window.location.href = "#/working/by-number"
-            }
+                window.location.href = "#/working/prescription/by-number"
+            } 
         }
     }
 }

@@ -7,12 +7,14 @@
 					<img :src="img" data-holder-rendered="true"> 
 					<div class="caption text-center">
 			    		<p>{{currentCode}}</p>
-			    		<button class="btn btn-info" @click="goBack()" v-if="this.identity == 'police'">
-			    			<span class="glyphicon glyphicon-arrow-left"></span>
-			    		</button>
-			    		<button class="btn btn-danger btn-small"  @click="editProfile()" v-if='identity == "police"'>
-							<span class="glyphicon glyphicon-edit"></span>
-						</button>
+			    		<div id="operation-panel" v-if='identity != "prison"'>
+				    		<button class="btn btn-info" @click="goBack()">
+				    			<span class="glyphicon glyphicon-arrow-left"></span>
+				    		</button>
+				    		<button class="btn btn-danger btn-small"  @click="editProfile()">
+								<span class="glyphicon glyphicon-edit"></span>
+							</button>
+						</div>
 			    	</div>
 				</a>
 			</div>
@@ -31,6 +33,7 @@ import MedicalPanel from './MedicalPanel.vue'
 import router from '../../router.js'
 import moment from "moment"
 import Vue from 'vue'
+import Security from '../../security.js'
 var states = ""
 export default {
     name: 'personal-profile',
@@ -41,7 +44,8 @@ export default {
             currentCode: '',
             identity: '',
             websocket: '',
-            tempObject:{}
+            tempObject: {},
+            confirmIntakeFlag: true
         }
     },
     methods: {
@@ -52,31 +56,59 @@ export default {
             window.location.href = '#/working/edit/' + this.currentCode
         },
         queryCurrentProfile() {
+            if (!this.confirmIntakeFlag) {
+                return
+            }
             var id = this.$route.params.id
             this.currentCode = id;
-            this.identity = window.localStorage.getItem('identity');
-            this.$http.get('inmate/medical/' + id).then((res) => {
-                this.img = 'img/head/' + id + ".png"
-                this.tempObject = _.groupBy(res.body, 'time')
-                this.medicalList = []
-                for (var time in  this.tempObject) {
-                    this.medicalList.push({
-                        'time': time,
-                        'medicalList':  this.tempObject[time]
+            this.identity = Security.currentIdentity();
+            this.$http.get('intake/miss/' + id + '/' + moment().format('YYYY-MM-DD'))
+                .then((res) => {
+                    var refused = []
+                    for(var i in res.body){
+                    	refused.push(res.body[i].need)
+                    }
+                    this.$http.get('inmate/medical/' + id).then((res) => {
+                        this.tempObject = _.groupBy(res.body, 'time')
+                        this.medicalList = []
+                        for (var time in this.tempObject) {
+                            var hour = moment().hour();
+                            if (Vue.matchingPredefineTime(hour).indexOf(time) >= 0) {
+                                this.confirmIntakeFlag = false;
+                            } else {
+                                this.confirmIntakeFlag = true;
+                            }
+                            var eachObject = {
+                                'time': time,
+                                'medicalList': this.tempObject[time]
+                            }
+                            if(refused.indexOf(time) >=0){
+                            	eachObject['miss'] = true
+                            }else {
+                            	eachObject['miss'] = false
+                            }
+                            this.medicalList.push(eachObject)
+                        }
+                        this.medicalList = _.sortBy(this.medicalList, function(m) {
+                            return Vue.qualifiedTime().indexOf(m.time)
+                        })
                     })
-                }
-                this.medicalList = _.sortBy(this.medicalList, function(m){
-					return Vue.qualifiedTime().indexOf(m.time)
-				})
-               
+                })
+
+            this.$http.get('inmates/' + id).then((res) => {
+                this.img = res.body[0].headPic
             })
-            window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
+            if (Security.currentIdentity() != 'police') {
+                //start to recording
+                window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
+            }
         },
-        confirmIntake(){
-        	var id = this.$route.params.id
+        confirmIntake() {
+            var id = this.$route.params.id
             var matching = this.findMatchingMedicalList(this.tempObject);
             this.$http.post('inmate/intake/' + id, JSON.stringify(_.compact(matching))).then((res) => {
-                console.info("confirm:" + id)
+                console.info("confirm:" + id);
+                this.confirmIntakeFlag = true;
             })
         },
         findMatchingMedicalList(object) {
@@ -97,8 +129,6 @@ export default {
         }
     },
     created: function() {
-        this.identity = window.localStorage.getItem('identity');
-        console.info(this.currentCode)
         this.queryCurrentProfile()
     },
     watch: {

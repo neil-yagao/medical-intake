@@ -35,6 +35,7 @@ public class PrisonIntakeRecord {
         template.save(INTAKE_RECORD_COLLECTION, new JSONObject().fluentPut("code", code)
                 .fluentPut("timestamp", new Date().getTime())
                 .fluentPut("date", TimeUtil.getCurrentDate())
+                .fluentPut("time", TimeUtil.getCurrentDateFormat("HH"))
                 .fluentPut("medicals", medicals)
                 .fluentPut("checked", false));
         //reduce medical num

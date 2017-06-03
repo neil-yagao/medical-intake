@@ -37,6 +37,12 @@ public class PrisonIntakeController {
         return refuseIntake.getAllRefusingRecord();
     }
 
+    @RequestMapping(value = "intake/miss/{code}/{date}")
+    @ResponseBody
+    public List<JSONObject> findPrisonMissIntakeRecords(@PathVariable String code, @PathVariable String date){
+        return refuseIntake.getPrisonMissIntakeRecords(code, date);
+    }
+
     @RequestMapping(value = "intake/{code}/{timespan}/{time}")
     @ResponseBody
     public List<JSONObject> findIntakeRecording(@PathVariable String code, @PathVariable String timespan, @PathVariable String time) {

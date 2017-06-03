@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="row" style="margin-top:10px ;max-height: 500px;overflow-y: scroll;">
-    	<div class="col-md-3" v-for="row in mathcingMedicals">
+    	<div class="col-md-2" v-for="row in mathcingMedicals">
         	<prescription :data="row" title="code"></prescription>
         </div>
     </div>

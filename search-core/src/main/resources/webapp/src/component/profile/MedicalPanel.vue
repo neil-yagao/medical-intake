@@ -1,6 +1,6 @@
 <template>
 	<div class="margin">
-		<div class="panel panel-transparent" :class="matchingTime(data.time)?'panel-info':'panel-warning'">
+		<div class="panel panel-transparent" :class="matchingTime(data.time)">
 		<!-- Default panel contents -->
 			<div class="panel-heading">服药时间：{{data.time}}<span style="float:right" class="glyphicon glyphicon-remove" @click="deletePanel()" v-if="edit"></span></div>
 			  <!-- Table -->
@@ -19,7 +19,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="panel-footer text-right" v-if="matchingTime(data.time)">
+			<div class="panel-footer text-right" v-if="matchingTime(data.time).indexOf('info') > 0">
 				<button class="btn btn-info" @click="confirm()" >确认服药</button>
 			</div>
 		</div>
@@ -29,8 +29,15 @@
 import _ from "lodash";
 import moment from 'moment';
 import Vue from 'vue';
+import Security from '../../security.js'
 export default {
 	name:'medical-panel',
+	data(){
+		return {
+			'missing':[],
+			'identity': Security.currentIdentity()
+		}
+	},
 	props:['data','edit'],
 	methods:{
 		deletePanel:function(medical){
@@ -41,11 +48,22 @@ export default {
 			this.$emit('delete-medical', {name: medical.medical, time: this.data.time})
 		},
 		matchingTime(time){
+			if(this.edit){
+				return 'panel-warning' 
+			}
+			if(this.data.miss){
+				return 'panel-danger'
+			}
 			var hour = moment().hour();
-			return Vue.matchingPredefineTime(hour).indexOf(time) >= 0;
+			if(Vue.matchingPredefineTime(hour).indexOf(time) >= 0){
+				return 'panel-info'
+			}else {
+				return 'panel-warning'
+			}
 		},
 		confirm(){
-			this.$emit('confirm-intake')
+			this.$emit('confirm-intake');
+			window.localStorage.setItem('confirm-intake', '1');
 		}
 	}
 

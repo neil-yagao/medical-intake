@@ -26,7 +26,7 @@ if (collections.indexOf("intake_records") >= 0) {
     intake_records = db.getCollection("intake_records");
     intake_records.createIndex({
         "code": 1,
-        "timestamp": 1
+        "time": 1
     }, {
         "unique": true
     })
@@ -66,6 +66,19 @@ if (collections.indexOf("medicals-records") >= 0) {
     missing_intake.createIndex({
         "medical": 1,
         "timestamp": 1
+    }, {
+        "unique": true
+    })
+}
+
+if (collections.indexOf("registered_identity") >= 0) {
+    print("found registered_identity")
+} else {
+    db.createCollection("registered_identity");
+    missing_intake = db.getCollection("registered_identity");
+    missing_intake.createIndex({
+        "code": 1,
+        "identity": 1
     }, {
         "unique": true
     })

@@ -25,6 +25,12 @@ function securityModule() {
                 }
             }
             return allow
+        },
+        currentIdentity() {
+            return window.localStorage.getItem('identity')
+        },
+        setCurrentIdentity(identity) {
+            window.localStorage.setItem('identity', identity)
         }
     }
 

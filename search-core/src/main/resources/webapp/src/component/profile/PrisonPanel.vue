@@ -4,7 +4,7 @@
 			<div class="col-md-3" v-for="inmate in matchingInmates">
 			    <a :href="inmate.toURL" class="thumbnail thumbnail-transparent" role="button" style="text-align:center">
 			    	<img :src="inmate.img" />
-			    	<div class="caption" v-if="inmate.code != 'add'">
+			    	<div class="caption">
 			    		<span><b>{{inmate.code}}</b></span>
 			    	</div>
 			    </a>
@@ -28,15 +28,13 @@ export default {
 		
 	},
     mounted: function() {
-        this.$http.get("inmate/medical/all").then((res) => {
+        this.$http.get("inmates/all").then((res) => {
             var self = this;
-            _.each(res.body, function(medicalInfo) {
+            _.each(res.body, function(identity) {
                 self.rows.push({
-                    'code': medicalInfo.code,
-                    'toURL': "#/working/detail/" + medicalInfo.code,
-                    'img': 'img/head/' + medicalInfo.code + ".png",
-                    'style': '',
-                    'time':medicalInfo.time
+                    'code': identity.code,
+                    'toURL': "#/working/detail/" + identity.code,
+                    'img': identity.headPic
                 });
             });
 
@@ -51,9 +49,7 @@ export default {
                     return val.code.indexOf(this.inmates.code) > 0
                 })
             }
-
-            var result = _.uniqBy(resultList, 'code')
-            return _.sortBy(result, 'code');
+            return _.sortBy(resultList, 'code');
         }
     }
 }

@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="row" style="margin-top:10px">
-            <div class="drop_zone" @drop="onFileChange" @dragover="dragging" style="min-height:200px;text-align:center">或拖拽文件至此处</div>
+            <div class="drop_zone" @drop="onFileChange" @dragover="dragging" style="min-height:200px;text-align:center;color:royalblue">或拖拽文件至此处</div>
         </div>
     </div>
 </template>
@@ -93,7 +93,7 @@ export default {
     	var id = this.$route.params.title;
     	if(id == "prescription"){
     		this.title = "上传处方信息"
-    	}else if(id == "medical"){
+    	}else {
     		this.title = "入库多个药物信息"
     	}
     }

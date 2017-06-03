@@ -53,9 +53,11 @@
 	</div>
 	<hr>
 	<div class="row margint" v-if="medicalList.length > 0">
-		<div class="col-md-2 col-md-offset-10" >
+		<div class="col-md-3 col-md-offset-9" >
+			<button class="btn btn-info" @click="goBackToList()">返回</button>
 			<button class="btn btn-success" @click="saveMedicalInfo()">保存</button>
 		</div>
+
 	</div>
 	<div class="alert" :class="alertClass" role="alert"v-show="showAlert">{{alertMsg}}</div>
 </div>
@@ -91,7 +93,8 @@ export default {
 			showAlert:false,
 			alertClass:  "alert-danger",
 			alertMsg :'',
-			qualifiedTime: Vue.qualifiedTime()
+			qualifiedTime: Vue.qualifiedTime(),
+			img:''
 		}
 	},
 	methods:{
@@ -128,6 +131,7 @@ export default {
 				}
 			});
 			var tempMedicalInfo = {
+				'code':self.code,
 				'time':self.medicalInfo.time,
 				'medicalList': medcialsForEachTime
 			}
@@ -181,6 +185,9 @@ export default {
 					}, 3000)
 				}
 			})
+		},
+		goBackToList(){
+			window.location.href = "#/working/prescription/by-number"
 		}
 	},
 	components: {
@@ -209,6 +216,9 @@ export default {
 					'medicalList': tempObject[time]
 				})
 			}
+			this.$http.get('inmates/' + id).then((res)=>{
+            	this.img = res.body[0].headPic
+            })
 			var self = this
 			this.medicalList = _.sortBy(this.medicalList, function(m){
 				return self.qualifiedTime.indexOf(m.time)
@@ -216,14 +226,6 @@ export default {
 		})
 		}
 
-	},
-	computed: {
-		img: function(){
-			if(this.code){
-				return 'img/head/' + this.code + ".png"
-			}
-			return ""
-		}
 	}
 }
 </script>

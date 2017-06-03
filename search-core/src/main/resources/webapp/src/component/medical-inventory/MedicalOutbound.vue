@@ -69,17 +69,18 @@ export default {
 					var medical = key.split(":")[0]
 					var date = key.split(":")[1];
 					var totalAmount = 0;
-					var usedBy = ""
+					var usedBy = []
 					for(var i in rawRecords){
 						console.info(rawRecords[i])
 						totalAmount += rawRecords[i].amount;
-						usedBy = usedBy? (usedBy + "," + rawRecords[i].prison): rawRecords[i].prison
+						usedBy.push(rawRecords[i].prison);
 					}
+					usedBy = _.union(usedBy);
 					this.outboundRecords.push({
 						'medical':medical,
 						'amount':totalAmount,
 						'date':date,
-						'prison': usedBy
+						'prison': _.join(usedBy)
 					})
 				}
 			})

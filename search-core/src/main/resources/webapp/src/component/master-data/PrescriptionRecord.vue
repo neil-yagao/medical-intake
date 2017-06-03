@@ -37,10 +37,10 @@
              {{record.changee}}   
             </div>
             <div class="col-md-3">
-                <prescription :data="record.from"></prescription>
+                <prescription :data="record.from" title="time"></prescription>
             </div>
             <div class="col-md-3">
-                <prescription :data="record.to"></prescription>
+                <prescription :data="record.to" title="time"></prescription>
             </div>
             <div class="col-md-2">
                 <h4>{{record.date}}</h4>

@@ -5,7 +5,7 @@
             <h4>已注册的人员</h4>
             <input class="form-control" v-model="searchingCode">
             <ul class="list-group margint">
-                <li v-for="registered in matchingRegs" class="list-group-item" :class="registered.identity == 'police'? ' list-group-item-danger':' list-group-item-success'">{{registered.code}}<span class="badge" @click="deleteIdentity(registered)" role="button">&times</span></li>
+                <li v-for="registered in matchingRegs" class="list-group-item" :class="getClass(registered.identity)">{{registered.code}}<span class="badge" @click="deleteIdentity(registered)" role="button">&times</span></li>
             </ul>
         </div>
         <div class="col-md-9">
@@ -38,7 +38,7 @@
                     <img id="photo" alt="" :src="headPic">
                 </div>
             </div>
-            <canvas id="canvas" />
+            <canvas id="canvas" hidden="true"/>
    
             <div class="row  margint">
                 <div class="col-md-4" v-for="imgSrc in imgs">
@@ -105,7 +105,7 @@ export default {
         }
 
         this.websocket.onclose = function(ob) {
-        	console.info("closing:" + ob)
+        	console.info("closing:")
         }
 
         video = document.getElementById('video');
@@ -168,17 +168,13 @@ export default {
                 'identity': this.identity,
                 'op': 'reg',
                 'imgs': this.imgs,
-                'head': imgCode + ".png"
+                'head': this.headPic
             }
             console.info("sending:" + identityInfo)
             console.info(this.websocket.readyState)
             if (this.websocket.readyState == this.websocket.OPEN) {
                 this.websocket.send(JSON.stringify(identityInfo))
                 this.regs.push(identityInfo)
-                var download = document.createElement("a");
-                download.href = this.headPic;
-                download.download = imgCode+ ".png";
-                download.click()
             }
             this.reset()
         },
@@ -215,6 +211,17 @@ export default {
         		return reg.code != r.code
         	})
     		this.$http.delete('identity/' + reg.code);
+        },
+        getClass(identity){
+        	if(identity == 'prison'){
+        		return 'list-group-item-success'
+        	}else if(identity == 'medical'){
+        		return 'list-group-item-warning'
+        	}else if(identity == 'police'){
+        		return 'list-group-item-danger'
+        	}
+
+
         }
     },
     computed: {

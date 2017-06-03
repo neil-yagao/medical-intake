@@ -21,6 +21,8 @@ public class MongoFingerPrintPersistent implements PersistentFingerPrint {
     private MongoTemplate mongoTemplate;
     @Autowired
     private FingerPrintCache fingerPrintCache;
+    @Autowired
+    private MongoIdentityRegister identityRegister;
 
     @Override
     public void persistentFingerPrint(CachedFingerPrint cachedFingerPrint) {
@@ -33,6 +35,7 @@ public class MongoFingerPrintPersistent implements PersistentFingerPrint {
         fingerPrint.put("identity", cachedFingerPrint.getIdentity());
         fingerPrint.put("headPic", cachedFingerPrint.getHeadPic());
         mongoTemplate.getCollection(COLLECTION_NAME).save(fingerPrint);
+        identityRegister.doRegister(cachedFingerPrint.getIdentityCode(),cachedFingerPrint.getIdentity(),cachedFingerPrint.getHeadPic());
     }
 
     @Override

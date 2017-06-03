@@ -24,7 +24,7 @@ public class RefuseIntake {
     private WrappedMongoTemplate wrappedMongoTemplate;
 
     public List<JSONObject> getAllRefusingRecord() {
-        return wrappedMongoTemplate.query(MISSING_INTAKE_COLLECTION, new JSONObject());
+        return wrappedMongoTemplate.query(MISSING_INTAKE_COLLECTION, new JSONObject().fluentPut("checked", false));
     }
 
     public void updateCheckedRecords(JSONArray records) {
@@ -38,5 +38,10 @@ public class RefuseIntake {
                             new BasicDBObject("$set", new BasicDBObject("checked", record.getBooleanValue("checked")))
                             , false, true);
         }
+    }
+
+    public List<JSONObject> getPrisonMissIntakeRecords(String code, String date) {
+        return wrappedMongoTemplate.query(MISSING_INTAKE_COLLECTION,
+                new JSONObject().fluentPut("date", date).fluentPut("code",code));
     }
 }
