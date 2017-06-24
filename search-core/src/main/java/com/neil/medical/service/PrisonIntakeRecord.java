@@ -5,15 +5,18 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.neil.medical.pojo.Medical;
 import com.neil.medical.util.TimeUtil;
+import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by nhu on 5/2/2017.
@@ -21,6 +24,8 @@ import java.util.List;
 @Service
 public class PrisonIntakeRecord {
     public static final String INTAKE_RECORD_COLLECTION = "intake_records";
+
+    private static Logger LOGGER = LoggerFactory.getLogger(PrisonIntakeRecord.class);
 
     @Autowired
     private WrappedMongoTemplate template;
@@ -30,6 +35,9 @@ public class PrisonIntakeRecord {
 
     @Autowired
     private MedicalInventory medicalInventory;
+
+    @Value("${file.location}")
+    private String directoryToWatch;
 
     public void inmateConfirmMedicalIntake(String code, List<JSONObject> medicals) {
         template.save(INTAKE_RECORD_COLLECTION, new JSONObject().fluentPut("code", code)
@@ -60,4 +68,38 @@ public class PrisonIntakeRecord {
     }
 
 
+    public JSONObject findVideo(String time) {
+
+        JSONObject exactMinute = doFindVideo(time);
+        if(exactMinute.isEmpty()){
+            //find next minute video
+            String[] splited = time.split("-");
+            String minute = splited[splited.length - 1];
+            String nextMinute = (Integer.parseInt(minute) + 1) + "";
+            splited[splited.length - 1] = nextMinute;
+            return doFindVideo(String.join("-",splited));
+        }
+        return exactMinute;
+
+    }
+
+    private JSONObject doFindVideo(String time) {
+        try{
+            boolean recursive = true;
+            String directoryPath = directoryToWatch + "/video";
+
+            Collection files = FileUtils.listFiles(new File(directoryPath), null, recursive);
+
+            for (Iterator iterator = files.iterator(); iterator.hasNext();) {
+                File file = (File) iterator.next();
+                if (file.getName().startsWith(time))
+                    return new JSONObject().fluentPut("video", file.getName());
+            }
+
+
+        }catch (Exception e){
+            LOGGER.error("exception during find video:",e);
+        }
+        return new JSONObject();
+    }
 }

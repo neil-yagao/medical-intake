@@ -187,7 +187,7 @@ export default {
 			})
 		},
 		goBackToList(){
-			window.location.href = "#/working/prescription/by-number"
+			window.location.href = "#/working/prescription/by-amount"
 		}
 	},
 	components: {

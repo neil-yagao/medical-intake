@@ -10,8 +10,11 @@
                     <div class="col-md-4">
                         <span>{{candidate.date}}</span>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <span>{{candidate.time}}</span>
+                    </div>
+                    <div class="col-md-1">
+          				<span class="glyphicon glyphicon-play-circle btn btn-default" @click="openVideo(candidate)"></span>
                     </div>
                 </div>
                 <div class="panel panel-info" v-if="candidate.selected" style="margin-top:10px">
@@ -23,6 +26,7 @@
                     			<th>药物名称</th>
                     			<th>数量</th>
                     			<th>服药时间</th>
+                    			<th></th>
                     		</tr>
                     	</thead>
                     	<tbody>
@@ -61,6 +65,15 @@ export default {
         }
     },
     props: ['condition', 'flag'],
+    methods:{
+    	openVideo(record){
+    		var parsedTime = moment(record.timestamp).format('YYYY-MM-DD(HH-mm');
+    		var x = screen.width / 2 - 700 / 2;
+    		var y = screen.height / 2 - 450 / 2;
+    		window.open('http://localhost:8080/#/intake-records/'+ parsedTime, '_blank',
+            'location=yes,height=500,width=700,scrollbars=yes,status=yes,left=' + x + ',top=' + y);
+    	}
+    },
     watch: {
         condition: function() {
             var timespan = this.condition.timespan;

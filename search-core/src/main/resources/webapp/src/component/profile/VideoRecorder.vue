@@ -103,16 +103,15 @@ export default {
             console.error('media error', e);
         },
         startAutoClose(){
-        	if (autoClose) {
-	        	clearInterval(autoClose)
-	        }
 	        autoClose = setInterval(() => {
 	            var lastUsed = window.localStorage.getItem('last-usage');
 	            var now = Math.floor(Date.now() / 1000);
                 var duration = now - lastUsed;
+                console.info('lastUsed:' + lastUsed);
 	            console.info('duration' + duration)
-                if (duration >= 300 && this.recording) {
+                if (duration >= 100 && this.recording) {
                     this.stop();
+                    clearInterval(autoClose)
                 }
                 if(duration < 10 && !this.recording){
                 	this.start()

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="panel panel-body panel-transparent">
 		<template v-for="record in records">
 			<div class="row">
 				<div class="col-md-6">
@@ -9,7 +9,7 @@
 			</div>
 			<div class="row" v-for="medical in record.medicals">
 				<div class="col-md-6 col-md-offset-6">
-					<p>{{medical.medical}}&times;{{medical.amount}}</p>
+					<p>{{medical.medical}}&nbsp;{{medical.incOrDesc?medical.incOrDesc:'&times'}}&nbsp;{{medical.amount}}</p>
 				</div>
 			</div>
 		</template>
@@ -46,3 +46,8 @@ export default {
 	}
 }
 </script>
+<style type="text/css">
+.panel-transparent {
+	 background: rgba(255, 255, 252, 0.6)!important;
+}
+</style>

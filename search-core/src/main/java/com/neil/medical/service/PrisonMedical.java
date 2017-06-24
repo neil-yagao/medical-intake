@@ -6,6 +6,8 @@ import com.mongodb.DBCollection;
 import com.neil.medical.pojo.PrisonMedicalInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +27,12 @@ public class PrisonMedical {
     private MongoTemplate template;
 
 
-    public List<JSONObject> getPrisonMedicalInfo(String code) {
-        JSONObject queryCondition = new JSONObject();
-        if (!code.equalsIgnoreCase("all")) {
-            queryCondition.put("code", code);
+    public List<PrisonMedicalInfo> getPrisonMedicalInfo(String code) {
+        Query condition = new Query();
+        if(!code.equalsIgnoreCase("all")){
+            condition.addCriteria(new Criteria("code").is(code));
         }
-        return wrappedTemplate.query(INMATE_REQUIRED_MEDICAL_COLLECTION, queryCondition);
+        return template.find(condition,PrisonMedicalInfo.class,INMATE_REQUIRED_MEDICAL_COLLECTION);
     }
 
     public void insertInmateMedicalInfo(List<PrisonMedicalInfo> prisonMedicalInfos) {

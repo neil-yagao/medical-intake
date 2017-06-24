@@ -18,11 +18,8 @@
     	 <div class="col-md-2">
             <h4>服药人</h4>
         </div>
-        <div class="col-md-3">
-            <h4>修改前</h4>
-        </div>
-        <div class="col-md-3">
-            <h4>修改后</h4>
+        <div class="col-md-5">
+            <h4>修改内容</h4>
         </div>
         <div class="col-md-2">
             <h4>修改时间</h4>
@@ -36,11 +33,8 @@
         	<div class="col-md-2">
              {{record.changee}}   
             </div>
-            <div class="col-md-3">
-                <prescription :data="record.from" title="time"></prescription>
-            </div>
-            <div class="col-md-3">
-                <prescription :data="record.to" title="time"></prescription>
+            <div class="col-md-5">
+                <prescription :data="record.changes" title="time"></prescription>
             </div>
             <div class="col-md-2">
                 <h4>{{record.date}}</h4>

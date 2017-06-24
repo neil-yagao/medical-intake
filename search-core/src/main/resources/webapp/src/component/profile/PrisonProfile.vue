@@ -45,7 +45,7 @@ export default {
             identity: '',
             websocket: '',
             tempObject: {},
-            confirmIntakeFlag: true
+            confirmIntakeFlag:true
         }
     },
     methods: {
@@ -56,8 +56,9 @@ export default {
             window.location.href = '#/working/edit/' + this.currentCode
         },
         queryCurrentProfile() {
-            if (!this.confirmIntakeFlag) {
-                return
+        	if (Security.currentIdentity() != 'police') {
+                //start to recording
+                window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
             }
             var id = this.$route.params.id
             this.currentCode = id;
@@ -71,13 +72,13 @@ export default {
                     this.$http.get('inmate/medical/' + id).then((res) => {
                         this.tempObject = _.groupBy(res.body, 'time')
                         this.medicalList = []
+                        var needConfirm = false;
+
                         for (var time in this.tempObject) {
                             var hour = moment().hour();
                             if (Vue.matchingPredefineTime(hour).indexOf(time) >= 0) {
-                                this.confirmIntakeFlag = false;
-                            } else {
-                                this.confirmIntakeFlag = true;
-                            }
+            					needConfirm = true;
+                            } 
                             var eachObject = {
                                 'time': time,
                                 'medicalList': this.tempObject[time]
@@ -89,6 +90,11 @@ export default {
                             }
                             this.medicalList.push(eachObject)
                         }
+                        if(needConfirm){
+                        	window.localStorage.setItem('confirm-intake', false);
+                        }else {
+                        	window.localStorage.setItem('confirm-intake', true);
+                        }
                         this.medicalList = _.sortBy(this.medicalList, function(m) {
                             return Vue.qualifiedTime().indexOf(m.time)
                         })
@@ -96,8 +102,10 @@ export default {
                 })
 
             this.$http.get('inmates/' + id).then((res) => {
+            	console.info(res.body)
                 this.img = res.body[0].headPic
             })
+
             if (Security.currentIdentity() != 'police') {
                 //start to recording
                 window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
@@ -108,7 +116,7 @@ export default {
             var matching = this.findMatchingMedicalList(this.tempObject);
             this.$http.post('inmate/intake/' + id, JSON.stringify(_.compact(matching))).then((res) => {
                 console.info("confirm:" + id);
-                this.confirmIntakeFlag = true;
+                window.localStorage.setItem('confirm-intake', true)
             })
         },
         findMatchingMedicalList(object) {
@@ -128,8 +136,8 @@ export default {
 
         }
     },
-    created: function() {
-        this.queryCurrentProfile()
+    mounted:function(){
+    	this.queryCurrentProfile();
     },
     watch: {
         '$route': 'queryCurrentProfile'

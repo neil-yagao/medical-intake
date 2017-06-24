@@ -32,7 +32,7 @@ public class PrisonMedicalController {
 
     @RequestMapping(value = "inmate/medical/{code}", method = RequestMethod.GET)
     @ResponseBody
-    public List<JSONObject> getPrisonMedicalInfo(@PathVariable String code) {
+    public List<PrisonMedicalInfo> getPrisonMedicalInfo(@PathVariable String code) {
         return prisonMedical.getPrisonMedicalInfo(code);
     }
 

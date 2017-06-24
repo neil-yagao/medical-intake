@@ -82,7 +82,7 @@ export default {
 						"amount":info["数量"]
 					}
 				})
-				this.$http.post('http://localhost:8080/inmate/medical', JSON.stringify(mappedData))
+				this.$http.post('inmate/medical', JSON.stringify(mappedData))
 				.then((response) => {
 					console.info(response.body)
 				})

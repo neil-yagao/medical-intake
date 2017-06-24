@@ -12,6 +12,8 @@ import PrescriptionRecord from './component/master-data/PrescriptionRecord.vue'
 import VueRouter from 'vue-router'
 import Security from './security.js'
 
+import VideoPlayer from './component/master-data/VideoPlayer.vue'
+
 const routes = [{
     path: "/working",
     component: WorkingSpace,
@@ -48,6 +50,9 @@ const routes = [{
 }, {
     path: '/recording',
     component: VideoRecorder
+}, {
+    path: '/intake-records/:time',
+    component: VideoPlayer
 }]
 
 const router = new VueRouter({
@@ -62,6 +67,7 @@ router.beforeEach((to, from, next) => {
         if (to.fullPath.indexOf('working/detail') > 0 && identity == 'prison') {
             showVideoRecordWindow()
         }
+        console.info("to" + to.fullPath)
         next()
     } else {
         next(false)

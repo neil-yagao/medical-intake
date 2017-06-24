@@ -56,4 +56,10 @@ public class PrisonIntakeController {
         intakeRecord.inmateConfirmMedicalIntake(code, medicals);
         return new JSONObject();
     }
+
+    @RequestMapping(value = "video-record/{time}")
+    @ResponseBody
+    public JSONObject findVideo(@PathVariable String time){
+        return intakeRecord.findVideo(time);
+    }
 }

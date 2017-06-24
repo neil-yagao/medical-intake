@@ -24,13 +24,16 @@ function securityModule() {
                     allow = true;
                 }
             }
-            return allow
+            return allow;
         },
         currentIdentity() {
             return window.localStorage.getItem('identity')
         },
         setCurrentIdentity(identity) {
             window.localStorage.setItem('identity', identity)
+        },
+        hasConfirmIntake() {
+            return window.localStorage.getItem('confirm-intake');
         }
     }
 

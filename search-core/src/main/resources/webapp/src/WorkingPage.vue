@@ -6,7 +6,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">处方管理<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#/working/upload/prescription">批量上传处方</a></li>
-                        <li><a href="#/working/prescription/by-number">按编号查询及修改</a></li>
+                        <li><a href="#/working/prescription/by-amount">按编号查询及修改</a></li>
                         <li><a href="#/working/prescription/records">处方修改记录</a></li>
                     </ul>
                 </li>
@@ -50,6 +50,7 @@
 
 
 <script>
+import Security from './security.js'
 export default {
     name: 'working-page',
     data() {
@@ -64,9 +65,10 @@ export default {
     },
     methods: {
     	logout(){
-    		window.location.href = "#/";
     		window.localStorage.setItem('identity', '');
     		window.localStorage.setItem('code', '')
+    		window.localStorage.setItem('confirm-intake', true);
+    		window.location.href = "#/";
     	}
     },
     mounted: function() {
@@ -78,7 +80,8 @@ export default {
         this.websocket = new WebSocket("ws://localhost:8090/identity");
 
         this.websocket.onopen = function() {
-            console.info("connected identity")
+            console.info("connected identity");
+            window.localStorage.setItem('confirm-intake', true);
         }
 
         this.websocket.onmessage = (msg) => {
@@ -87,10 +90,16 @@ export default {
             this.identity = infor.identity;
             window.localStorage.setItem('identity', infor.identity);
             window.localStorage.setItem('code', infor.code)
+
             if (infor.identity =='prison' || infor.identity == 'medical') {
-            	window.location.href = "#/working/detail/" + infor.code;
+            	var hasConfirmIntake = Security.hasConfirmIntake();
+            	console.info("confirm:" + hasConfirmIntake);
+            	if(hasConfirmIntake != 'false'){
+            		console.info("transfering!")
+            		window.location.href = "#/working/detail/" + infor.code;
+            	}
             } else if (infor.identity == 'police') {
-                window.location.href = "#/working/prescription/by-number"
+                window.location.href = "#/working/prescription/by-amount"
             } 
         }
     }

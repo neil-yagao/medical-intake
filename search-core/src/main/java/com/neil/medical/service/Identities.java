@@ -16,7 +16,8 @@ public class Identities {
     private WrappedMongoTemplate template;
 
     public List<JSONObject> getIdentities(String code){
-        JSONObject queryCondition = new JSONObject().fluentPut("identity","prison");
+        JSONObject queryCondition = new JSONObject();
+        queryCondition.put("identity", new JSONObject().fluentPut("$ne", "police"));
         if(!code.equalsIgnoreCase("all")){
             queryCondition.put("code",code);
         }

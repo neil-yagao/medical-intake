@@ -48,6 +48,7 @@ export default {
             }else {
                 window.location.href = "#/working/detail/" + window.localStorage.getItem('code')
             }
+            this.websocket.close();
         }
     },
     computed:{
