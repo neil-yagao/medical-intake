@@ -27,6 +27,9 @@ public class FingerPrintIdentityHandler extends TextWebSocketHandler {
     }
 
     public void sendIdentity(CachedFingerPrint cachedFingerPrint) {
+        if(cachedFingerPrint == null){
+            return ;
+        }
         JSONObject idJSON = new JSONObject()
                 .fluentPut("code", cachedFingerPrint.getIdentityCode())
                 .fluentPut("identity", cachedFingerPrint.getIdentity());
