@@ -6,6 +6,10 @@ import com.neil.medical.pojo.PrescriptionChangeItem;
 import com.neil.medical.pojo.PrisonMedicalInfo;
 import com.neil.medical.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +30,9 @@ public class PrisonPrescription {
 
     @Autowired
     private WrappedMongoTemplate template;
+
+    @Autowired
+    private MongoTemplate rawTemplate;
 
     public void recordChange(List<PrisonMedicalInfo> to, String code) {
         String prisonCode = to.get(0).getCode();
@@ -93,5 +100,20 @@ public class PrisonPrescription {
             }
         }
         return items;
+    }
+
+    public JSONObject confirmPrescriptionChanges(List<JSONObject> changes, String code) {
+        for(JSONObject change:changes){
+            Query condition = new Query();
+            condition.addCriteria(
+                    new Criteria("timestamp")
+                            .is(change.getLong("timestamp"))
+            );
+            Update update = new Update();
+            update.set("confirmer",code);
+            update.set("confirm_timestamp", new Date().getTime());
+            rawTemplate.updateMulti(condition,update,PRISON_PRESCRIPTION_CHANGE_HISTORY);
+        }
+        return new JSONObject();
     }
 }

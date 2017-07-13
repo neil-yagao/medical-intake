@@ -18,7 +18,7 @@
 <script>
 import InmatePanel from '../profile/PrisonPanel.vue'
 export default {
-    name: 'by-amount-search',
+    name: 'by-number-search',
     data() {
         return {
             id: '',

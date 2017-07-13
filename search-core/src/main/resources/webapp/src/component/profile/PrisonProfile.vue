@@ -60,6 +60,7 @@ export default {
                 //start to recording
                 window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
             }
+            console.info('query profile!')
             var id = this.$route.params.id
             this.currentCode = id;
             this.identity = Security.currentIdentity();
@@ -105,11 +106,6 @@ export default {
             	console.info(res.body)
                 this.img = res.body[0].headPic
             })
-
-            if (Security.currentIdentity() != 'police') {
-                //start to recording
-                window.localStorage.setItem('last-usage', Math.floor(Date.now() / 1000))
-            }
         },
         confirmIntake() {
             var id = this.$route.params.id
@@ -140,7 +136,11 @@ export default {
     	this.queryCurrentProfile();
     },
     watch: {
-        '$route': 'queryCurrentProfile'
+        '$route': function(val){
+        	if(val.path.indexOf('detail') > 0){
+        		this.queryCurrentProfile();
+        	}
+        }
     },
     components: {
         'medical-panel': MedicalPanel

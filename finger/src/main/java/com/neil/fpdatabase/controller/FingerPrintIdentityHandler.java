@@ -35,6 +35,9 @@ public class FingerPrintIdentityHandler extends TextWebSocketHandler {
                 .fluentPut("identity", cachedFingerPrint.getIdentity());
         LOGGER.info("sending identity:" + idJSON.toJSONString());
         TextMessage idInfo = new TextMessage(idJSON.toJSONString());
+        if(connectingSessions == null){
+            return;
+        }
         for (WebSocketSession connectingSession : connectingSessions) {
             try {
                 if (connectingSession != null && connectingSession.isOpen()) {

@@ -42,5 +42,11 @@ public class PrisonMedicalController {
         return prescription.getHistory(code, timespan);
     }
 
+    @RequestMapping(value = "prescription/confirm/{code}")
+    @ResponseBody
+    public JSONObject confirmPrescriptionChange(@RequestBody List<JSONObject> changes, @PathVariable String code){
+        return prescription.confirmPrescriptionChanges(changes, code);
+    }
+
 
 }

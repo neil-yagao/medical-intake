@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +18,8 @@ public class Identities {
 
     public List<JSONObject> getIdentities(String code){
         JSONObject queryCondition = new JSONObject();
-        queryCondition.put("identity", new JSONObject().fluentPut("$ne", "police"));
+        queryCondition.put("identity", new JSONObject().fluentPut("$in",
+                Arrays.asList("prison","medical")));
         if(!code.equalsIgnoreCase("all")){
             queryCondition.put("code",code);
         }

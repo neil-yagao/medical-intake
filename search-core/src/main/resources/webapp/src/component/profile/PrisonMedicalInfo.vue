@@ -52,10 +52,10 @@
 		</div>
 	</div>
 	<hr>
-	<div class="row margint" v-if="medicalList.length > 0">
+	<div class="row margint" >
 		<div class="col-md-3 col-md-offset-9" >
 			<button class="btn btn-info" @click="goBackToList()">返回</button>
-			<button class="btn btn-success" @click="saveMedicalInfo()">保存</button>
+			<button class="btn btn-success" @click="saveMedicalInfo()" v-if="medicalList.length > 0">保存</button>
 		</div>
 
 	</div>
@@ -187,7 +187,7 @@ export default {
 			})
 		},
 		goBackToList(){
-			window.location.href = "#/working/prescription/by-amount"
+			window.location.href = "#/working/prescription/by-number"
 		}
 	},
 	components: {

@@ -70,7 +70,8 @@ export default {
 				})
 				this.$http.post('medicals', JSON.stringify(mappedData))
 				.then((response) => {
-					console.info(response.body)
+					console.info(response.body);
+					this.confirmUpload()
 				})
 			}
 			if(data.inmates){
@@ -82,11 +83,23 @@ export default {
 						"amount":info["数量"]
 					}
 				})
-				this.$http.post('inmate/medical', JSON.stringify(mappedData))
+				var modifyBy = window.localStorage.getItem('code')
+				this.$http.post('inmate/medical/' + modifyBy, JSON.stringify(mappedData))
 				.then((response) => {
-					console.info(response.body)
+					console.info(response.body);
+					this.confirmUpload()
+
 				})
 			}
+		},
+		confirmUpload(){
+			var confirm = document.createElement("div")
+			confirm.innerHTML = '<div class="alert alert-success" role="alert">上传成功！</div>'
+			var body = document.getElementById("working-area");
+			body.appendChild(confirm);
+			setTimeout(function(){
+				body.removeChild(confirm)
+			}, 2000)
 		}
     },
     mounted:function(){
@@ -96,6 +109,8 @@ export default {
     	}else {
     		this.title = "入库多个药物信息"
     	}
+    	
+
     }
 
 }

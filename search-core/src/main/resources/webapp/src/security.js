@@ -2,7 +2,8 @@ function securityModule() {
     var identityUrlAccessMapping = {
         'prison': [/.*working\/detail.*/, /.*recording.*/],
         'police': [/.*/],
-        'medical': [/.*working\/.*/, /.*recording.*/]
+        'medical': [/.*working\/.*/, /.*recording.*/],
+        'docter': [/.*/]
     }
     return {
         isAllowTransfer(toUrl) {

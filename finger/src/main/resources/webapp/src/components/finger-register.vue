@@ -5,7 +5,9 @@
             <h4>已注册的人员</h4>
             <input class="form-control" v-model="searchingCode">
             <ul class="list-group margint">
-                <li v-for="registered in matchingRegs" class="list-group-item" :class="getClass(registered.identity)">{{registered.code}}<span class="badge" @click="deleteIdentity(registered)" role="button">&times</span></li>
+                <li v-for="registered in matchingRegs" class="list-group-item" :class="getClass(registered.identity)">{{registered.code}}
+                    <span class="badge" @click="deleteIdentity(registered)" role="button">&times</span>
+                </li>
             </ul>
         </div>
         <div class="col-md-9">
@@ -21,25 +23,34 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-2">
-                    <input type="radio" v-model="identity" value="prison">注册为服刑人员
+                <div class="col-md-6" style="margin-top:10px">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请在右侧选择人员身份" v-model="identityShow">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">注册人员身份
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li @click="identity = 'medical'"><a>医药人员</a></li>
+                                <li @click="identity = 'prison'"><a>服刑人员</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li @click="identity = 'docter'"><a>管理医生</a></li>
+                                <li @click="identity = 'police'"><a>教管民警</a></li>
+                            </ul>
+                        </div>
+                        <!-- /btn-group -->
+                    </div>
+                    <!-- /input-group -->
                 </div>
-                <div class="col-md-2">
-                    <input type="radio" v-model="identity" value="medical">注册为药物管理
-                </div>
-                <div class="col-md-2">
-                    <input type="radio" v-model="identity" value="police">注册为管教人员
-                </div>
-                 <div class="col-md-3" style="top: -60px; position: relative">
+                <div class="col-md-3" style="top: -60px; position: relative">
                     <video id="video"></video>
-                    <button id="startbutton" @click="takepicture()" :disabled="code.length == 0">拍摄</button>
+                    <button id="startbutton" @click="takepicture()">拍摄</button>
                 </div>
                 <div class="col-md-3" style="top: -60px; position: relative">
                     <img id="photo" alt="" :src="headPic">
                 </div>
             </div>
-            <canvas id="canvas" hidden="true"/>
-   
+            <canvas id="canvas" hidden="true" />
             <div class="row  margint">
                 <div class="col-md-4" v-for="imgSrc in imgs">
                     <img :src="imgSrc">
@@ -54,7 +65,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 </template>
@@ -219,6 +229,8 @@ export default {
         		return 'list-group-item-warning'
         	}else if(identity == 'police'){
         		return 'list-group-item-danger'
+        	}else if(identity == 'docter'){
+        		return 'list-group-item-info'
         	}
 
 
@@ -226,7 +238,7 @@ export default {
     },
     computed: {
         isRegisterable: function() {
-            if (this.identity == 'prison' && this.headPic.length == 0) {
+            if ((this.identity == 'prison' || this.identity == 'medical') && this.headPic.length == 0) {
                 return false;
             }
             if (this.imgs.length == 3 && this.code.length > 0) {
@@ -242,6 +254,17 @@ export default {
         		})
         	}
         	return this.regs;
+        },
+        identityShow:function(){
+        	if(this.identity == 'prison'){
+        		return '服刑人员'
+        	}else if(this.identity == 'police'){
+        		return '教管民警'
+        	}else if(this.identity == 'medical'){
+        		return '医药人员'
+        	}else if(this.identity == 'docter'){
+        		return '管理医生'
+        	}
         }
     }
 }

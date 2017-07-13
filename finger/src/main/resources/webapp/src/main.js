@@ -5,6 +5,9 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import App from './App.vue'
 
+window.jQuery = require("jquery")
+require("bootstrap")
+
 
 Vue.use(VueRouter)
 Vue.use(VueResource)

@@ -1,12 +1,13 @@
 <template>
     <div>
-        <nav class="navbar navbar-default navbar-fixed-top" v-if=" identity== 'police' || identity == 'medical'">
+        <nav class="navbar navbar-default navbar-fixed-top" 
+        v-if=" identity== 'police' || identity == 'medical' || identity == 'docter'">
             <ul class="nav navbar-nav navbar-left">
                 <li class="dropdown" :class="this.$route.path.indexOf('prescription') >= 0?'active':''">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">处方管理<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#/working/upload/prescription">批量上传处方</a></li>
-                        <li><a href="#/working/prescription/by-amount">按编号查询及修改</a></li>
+                        <li><a href="#/working/prescription/by-number">按编号查询及修改</a></li>
                         <li><a href="#/working/prescription/records">处方修改记录</a></li>
                     </ul>
                 </li>
@@ -43,7 +44,8 @@
             <router-view @confirm-intake="console.info('in working-area')"></router-view>
         </div>
         <footer class="text-center">
-            <span><b> 当前时间：{{currentTime}}</b></span>
+            <span v-if="!showDisconnection"><b> 当前时间：{{currentTime}}</b></span>
+            <div v-if="showDisconnection" class="alert alert-danger" role="alert">失去连接，请刷新页面</div>
         </footer>
     </div>
 </template>
@@ -60,7 +62,8 @@ export default {
             identity:window.localStorage.getItem('identity'),
             websocket:'',
             debounceToLogin:'',
-            vedioRecording:false
+            vedioRecording:false,
+            showDisconnection:false
         }
     },
     methods: {
@@ -84,6 +87,16 @@ export default {
             window.localStorage.setItem('confirm-intake', true);
         }
 
+        this.websocket.onclose = () => {
+        	console.info("lost connection to identity");
+        	this.showDisconnection = true;
+        }
+
+        this.websocket.onerror = () => {
+        	console.info("lost connection to identity");
+        	this.showDisconnection = true;
+        }
+
         this.websocket.onmessage = (msg) => {
             var infor = JSON.parse(msg.data)
             console.info(infor)
@@ -99,8 +112,10 @@ export default {
             		window.location.href = "#/working/detail/" + infor.code;
             	}
             } else if (infor.identity == 'police') {
-                window.location.href = "#/working/prescription/by-amount"
-            } 
+                window.location.href = "#/working/data-edit/intake"
+            } else if (infor.identity == 'docter'){
+            	window.location.href = '#/working/prescription/records'
+            }
         }
     }
 }

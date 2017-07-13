@@ -67,7 +67,8 @@ public class FingerPrintRegisterHandler extends TextWebSocketHandler {
             File file = new File(fileLocation + "/" + img);
             File toFile = new File(fullPath + "/" + identityCode + "-" + i + ".png");
             if (toFile.exists()) {
-                LOGGER.error("rename failed, already existed!");
+                toFile.delete();
+                LOGGER.warn("file already existed, delete origin");
             }
             boolean success = file.renameTo(toFile);
             if (!success) {

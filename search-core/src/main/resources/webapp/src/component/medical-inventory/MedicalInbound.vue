@@ -11,7 +11,7 @@
         	<button class="btn btn-default" @click="downloadRecords()"><span class="glyphicon glyphicon-download-alt"></span></button>
         </div>
     </div>
-    <code-and-timespan @condition-query="passingCondition($event)"></code-and-timespan>
+    <code-and-timespan @condition-query="passingCondition($event)" :showTime="false"></code-and-timespan>
     <div style="max-height: 500px;overflow-y: scroll">
 	    <table class="table table-hover">
 	    	<thead>
